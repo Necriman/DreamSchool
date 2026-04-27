@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>О школе — Dream School</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* ===== Manifesto ===== */
+  .manifesto {
+    background: var(--bg-soft);
+    padding: var(--space-7) 0;
+  }
+  .manifesto-text {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .manifesto-text em { color: var(--accent); font-style: italic; }
+  .manifesto-mark {
+    text-align: center;
+    margin-bottom: var(--space-4);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 4rem;
+    color: var(--sky-deep);
+    line-height: 1;
+  }
+
+  /* ===== Story timeline ===== */
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-7);
+    align-items: start;
+  }
+  @media (max-width: 920px) { .story-grid { grid-template-columns: 1fr; gap: var(--space-5); } }
+
+  .story-img {
+    aspect-ratio: 4/5;
+    border-radius: var(--r-lg);
+    background: linear-gradient(135deg, var(--sky), var(--sky-deep));
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 7rem;
+    font-weight: 300;
+    box-shadow: var(--shadow-lg);
+  }
+  .story-img::before {
+    content: '';
+    position: absolute;
+    inset: 16px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: calc(var(--r-lg) - 8px);
+  }
+
+  .timeline {
+    list-style: none;
+    border-left: 2px solid var(--line);
+    padding-left: var(--space-4);
+  }
+  .timeline li {
+    position: relative;
+    padding-bottom: var(--space-5);
+  }
+  .timeline li:last-child { padding-bottom: 0; }
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--space-4) * -1 - 7px);
+    top: 6px;
+    width: 12px; height: 12px;
+    background: var(--white);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+  }
+  .timeline-year {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .timeline h4 { margin-bottom: 6px; font-size: 1.1rem; }
+  .timeline p { color: var(--ink-soft); font-size: 0.95rem; }
+
+  /* ===== Approach ===== */
+  .approach {
+    background: var(--ink);
+    color: white;
+    border-radius: var(--r-xl);
+    padding: var(--space-7);
+    position: relative;
+    overflow: hidden;
+  }
+  .approach::before, .approach::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(127, 177, 224, 0.15);
+    pointer-events: none;
+  }
+  .approach::before { width: 500px; height: 500px; top: -200px; right: -150px; }
+  .approach::after { width: 300px; height: 300px; bottom: -100px; left: -80px; }
+  .approach > * { position: relative; z-index: 1; }
+  .approach h2 { color: white; margin-bottom: var(--space-3); }
+  .approach h2 em { color: var(--sky); font-style: italic; }
+
+  .approach-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+  @media (max-width: 768px) { .approach-grid { grid-template-columns: 1fr; } }
+  .approach-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--r-md);
+    padding: var(--space-4);
+    backdrop-filter: blur(10px);
+  }
+  .approach-item h4 { color: white; margin-bottom: 8px; }
+  .approach-item p { color: rgba(255,255,255,0.7); font-size: 0.95rem; }
+
+  /* ===== Numbers ===== */
+  .numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+  @media (max-width: 768px) { .numbers-grid { grid-template-columns: repeat(2, 1fr); } }
+  .number-card {
+    text-align: center;
+    padding: var(--space-5) var(--space-3);
+    border-right: 1px solid var(--line);
+  }
+  .number-card:last-child { border-right: none; }
+  @media (max-width: 768px) {
+    .number-card:nth-child(2) { border-right: none; }
+    .number-card { border-bottom: 1px solid var(--line); border-right-color: var(--line); }
+    .number-card:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  .number-big {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: var(--space-2);
+  }
+  .number-card p {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  /* ===== FAQ ===== */
+  .faq-list {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .faq-item {
+    border: 1px solid rgba(102, 126, 241, 0.2);
+    border-radius: 16px;
+    padding: 0 var(--space-3);
+    margin-bottom: var(--space-3);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(243, 247, 255, 0.88));
+    transition: transform var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast);
+  }
+  .faq-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); border-color: rgba(102, 126, 241, 0.35); }
+  .faq-trigger {
+    width: 100%;
+    text-align: left;
+    padding: var(--space-4) 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    color: var(--ink);
+    transition: color var(--t-fast);
+  }
+  .faq-trigger:hover { color: var(--accent); }
+  .faq-icon {
+    width: 32px; height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    transition: all var(--t-fast);
+  }
+  .faq-item.is-open .faq-icon { background: var(--accent); border-color: var(--accent); color: white; transform: rotate(45deg); }
+  .faq-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--t-med);
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+  .faq-item.is-open .faq-body { max-height: 260px; padding-bottom: var(--space-4); }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img class="logo-mark" src="assets/logo.png" alt="Dream School logo"><span>Dream</span><span>School</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="about.html">О школе</a></li>
+      <li><a href="programs.html">Программа</a></li>
+      <li><a href="teachers.html">Учителя</a></li>
+      <li><a href="news.html">Новости</a></li>
+      <li><a href="contacts.html">Контакты</a></li>
+    </ul>
+    <a href="index.html#trial" class="nav-cta">Записаться</a>
+    <button class="nav-burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-inner">
+      <span class="eyebrow fade-up">О школе</span>
+      <h1 class="fade-up fade-up-1">
+        Школа, в которой<br>
+        ребёнок учится <em>быть собой</em>.
+      </h1>
+      <p class="lead fade-up fade-up-2" style="max-width: 580px;">
+        Dream School — это не просто частное образование. Это пространство, где каждый ребёнок встречает уважение, интерес и заботу. Где знания становятся инструментом, а не целью.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <div class="container">
+    <div class="manifesto-mark reveal">«</div>
+    <p class="manifesto-text reveal">
+      Мы осознанно строим среду,<br>
+      в которой дети <em>соединяются</em>,<br>
+      а не просто учатся рядом.
+    </p>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="section">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-img reveal">D<span class="heart-accent" style="position: absolute; bottom: 32px; right: 32px; font-size: 2.5rem;">♥</span></div>
+
+      <div class="reveal">
+        <span class="eyebrow">Наша история</span>
+        <h2 style="margin-top: var(--space-3); margin-bottom: var(--space-4);">От идеи —<br>к <em class="serif-italic" style="color: var(--accent);">пространству роста</em></h2>
+        <p class="lead" style="margin-bottom: var(--space-5);">
+          Dream School родилась из веры, что школа может быть совершенно другой — тёплой, осмысленной, ориентированной на личность.
+        </p>
+
+        <ul class="timeline">
+          <li>
+            <div class="timeline-year">2015</div>
+            <h4>Первый набор</h4>
+            <p>Открыли двери для первых учеников с программой углублённого английского.</p>
+          </li>
+          <li>
+            <div class="timeline-year">2018</div>
+            <h4>Расширение программы</h4>
+            <p>Добавили углублённую математику и систему кружков. Команда выросла до 30 педагогов.</p>
+          </li>
+          <li>
+            <div class="timeline-year">2022</div>
+            <h4>Новое здание</h4>
+            <p>Переехали в современный кампус на Юнусабад-19 со специализированными классами и зонами для творчества.</p>
+          </li>
+          <li>
+            <div class="timeline-year">Сегодня</div>
+            <h4>Сообщество</h4>
+            <p>Более 770 семей доверяют нам обучение и развитие своих детей. Растём вместе.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section class="section">
+  <div class="container">
+    <div class="approach reveal">
+      <span class="eyebrow" style="color: var(--sky);">Наш подход</span>
+      <h2 style="margin-top: var(--space-3); max-width: 720px;">Сильные знания —<br>в среде <em>настоящей заботы</em></h2>
+      <p style="opacity: 0.85; max-width: 600px; margin-top: var(--space-3);">
+        Мы соединяем академическую глубину с эмоциональным теплом. Это не выбор «или» — это и то, и другое одновременно.
+      </p>
+
+      <div class="approach-grid">
+        <div class="approach-item">
+          <h4>→ Малые группы</h4>
+          <p>До 15 детей в классе. Каждого учителя хватает на каждого ребёнка.</p>
+        </div>
+        <div class="approach-item">
+          <h4>→ Двойной контроль качества</h4>
+          <p>Ежемесячные срезы и обратная связь. Вы знаете, как растёт ваш ребёнок.</p>
+        </div>
+        <div class="approach-item">
+          <h4>→ Живые педагоги</h4>
+          <p>Учителя, которые любят свою профессию и каждый день растут вместе с детьми.</p>
+        </div>
+        <div class="approach-item">
+          <h4>→ Открытость</h4>
+          <p>Родители — часть процесса. Регулярные встречи, открытые уроки, прозрачная коммуникация.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section class="section-sm">
+  <div class="container">
+    <div class="numbers-grid">
+      <div class="number-card reveal">
+        <div class="number-big">10+</div>
+        <p>лет работы</p>
+      </div>
+      <div class="number-card reveal">
+        <div class="number-big">770+</div>
+        <p>семей с нами</p>
+      </div>
+      <div class="number-card reveal">
+        <div class="number-big">15</div>
+        <p>учеников в классе</p>
+      </div>
+      <div class="number-card reveal">
+        <div class="number-big">12</div>
+        <p>направлений кружков</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="background: var(--bg-soft);">
+  <div class="container">
+    <div style="text-align: center; margin-bottom: var(--space-6);">
+      <span class="eyebrow" style="justify-content: center;">Частые вопросы</span>
+      <h2 style="margin-top: var(--space-3);">Всё, что важно <em class="serif-italic" style="color: var(--accent);">знать</em></h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item" data-faq>
+        <button class="faq-trigger" data-faq-trigger>
+          <span>Как проходит поступление?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <p>После заявки наш менеджер свяжется с вами, обсудит детали и пригласит на знакомство. На встрече ребёнок проходит мягкое собеседование, родители знакомятся с программой и условиями. Решение принимается в течение нескольких дней.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-faq>
+        <button class="faq-trigger" data-faq-trigger>
+          <span>С какого возраста принимаете детей?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <p>У нас есть подготовительный класс для детей от 5 лет, а также все ступени начальной и средней школы. Каждой возрастной группе — свой подход и программа.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-faq>
+        <button class="faq-trigger" data-faq-trigger>
+          <span>Что входит в стоимость обучения?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <p>Полная учебная программа, питание, базовые кружки и все учебные материалы. Расширенные кружки и индивидуальные занятия — по желанию, отдельно. Точные суммы менеджер расскажет после первого контакта.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-faq>
+        <button class="faq-trigger" data-faq-trigger>
+          <span>Можно ли посетить школу до записи?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <p>Конечно. Более того — мы рекомендуем записаться на бесплатный пробный день. Ребёнок попробует уроки, вы увидите атмосферу. Это лучший способ понять, насколько школа подходит вашей семье.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-faq>
+        <button class="faq-trigger" data-faq-trigger>
+          <span>Как организовано питание?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <p>Полноценное горячее питание — завтрак, обед и полдник. Меню составляется с учётом возраста и аллергий. Используем свежие продукты и контролируем качество ежедневно.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" data-faq>
+        <button class="faq-trigger" data-faq-trigger>
+          <span>Какие документы нужны для поступления?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <p>Свидетельство о рождении, медицинская карта, фото ребёнка и копия паспорта одного из родителей. Полный список менеджер пришлёт после первого общения.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="container" style="text-align: center; max-width: 720px;">
+    <span class="eyebrow" style="justify-content: center;">Готовы познакомиться?</span>
+    <h2 style="margin-top: var(--space-3); margin-bottom: var(--space-3);">Приходите на <em class="serif-italic" style="color: var(--accent);">пробный день</em></h2>
+    <p class="lead" style="margin-bottom: var(--space-4);">Один день в школе — лучший способ почувствовать, подходит ли она вашей семье.</p>
+    <a href="index.html#trial" class="btn btn-primary">Записаться <span class="btn-arrow">→</span></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img class="logo-mark" src="assets/logo.png" alt="Dream School logo"><span>Dream</span><span>School</span></div>
+        <p>Частная школа с углублённой программой английского и математики. Юнусабад-19, Ташкент.</p>
+      </div>
+      <div>
+        <h4>Сайт</h4>
+        <ul class="footer-list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="about.html">О школе</a></li>
+          <li><a href="programs.html">Программа</a></li>
+          <li><a href="teachers.html">Учителя</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Дополнительно</h4>
+        <ul class="footer-list">
+          <li><a href="news.html">Новости</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="index.html#trial">Пробный день</a></li>
+          <li><a href="programs.html#clubs">Кружки</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Связаться</h4>
+        <ul class="footer-list">
+          <li><a href="tel:+998957729999">+998 95 772-99-99</a></li>
+          <li><a href="tel:+998909480013">+998 90 948-00-13</a></li>
+          <li><a href="https://t.me/umkasmith">@umkasmith</a></li>
+          <li>Юнусабад-19</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Dream School. Все права защищены.</span>
+      <div class="socials">
+        <a href="https://instagram.com/dreamschooluz" target="_blank" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://t.me/dreamschooluz" target="_blank" aria-label="Telegram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 3L2 11l6 2 2 7 4-5 6 5 2-17z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Учителя — Dream School</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .teachers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+  @media (max-width: 920px) { .teachers-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .teachers-grid { grid-template-columns: 1fr; } }
+
+  .teacher-card {
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(102, 126, 241, 0.14) !important;
+    border-radius: 20px !important;
+    overflow: hidden;
+    transition: transform var(--t-med), box-shadow var(--t-med), border-color var(--t-med);
+  }
+  .teacher-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(102, 126, 241, 0.36) !important;
+    box-shadow: 0 20px 48px rgba(27, 32, 86, 0.14) !important;
+  }
+  .teacher-photo {
+    aspect-ratio: 4/5;
+    background: linear-gradient(135deg, var(--bg-tint), var(--sky));
+    position: relative;
+    display: grid;
+    place-items: center;
+    color: var(--accent);
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 5rem;
+    line-height: 1;
+    overflow: hidden;
+  }
+  .teacher-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(18, 31, 88, 0.04) 20%, rgba(18, 31, 88, 0.42) 100%);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    z-index: 1;
+  }
+  .teacher-photo::after {
+    content: attr(data-name);
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    color: white;
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    transform: translateY(12px);
+    opacity: 0;
+    transition: all 0.45s ease;
+    z-index: 2;
+  }
+  .teacher-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transform: scale(1.05);
+    transform-origin: center top;
+    transition: transform 0.55s ease;
+  }
+  .teacher-card:hover .teacher-photo img { transform: scale(1.1); }
+  .teacher-card:hover .teacher-photo::before { opacity: 1; }
+  .teacher-card:hover .teacher-photo::after { opacity: 1; transform: translateY(0); }
+  .teacher-photo.style-2 { background: linear-gradient(135deg, var(--sky), var(--sky-deep)); color: white; }
+  .teacher-photo.style-3 { background: linear-gradient(135deg, var(--sky-deep), var(--accent)); color: white; }
+  .teacher-photo.style-4 { background: linear-gradient(135deg, #FFFFFF, var(--bg-tint)); border-bottom: 1px solid var(--line); color: var(--sky-deep); }
+  .teacher-photo.style-5 { background: linear-gradient(135deg, var(--ink), #243752); color: var(--sky); }
+
+  .teacher-info {
+    padding: var(--space-4);
+  }
+  .teacher-subject {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .teacher-info h3 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+  .teacher-info p {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .teacher-stats {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--line);
+  }
+  .teacher-stats span {
+    font-size: 0.8rem;
+    color: var(--ink-mute);
+  }
+  .teacher-stats span strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Note */
+  .photo-note {
+    background: var(--bg-soft);
+    border-left: 3px solid var(--accent);
+    padding: var(--space-4);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    margin-bottom: var(--space-5);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  .photo-note strong { color: var(--ink); }
+
+  /* Philosophy */
+  .philosophy {
+    background: var(--bg-soft);
+    text-align: center;
+    padding: var(--space-7) 0;
+  }
+  .philosophy-quote {
+    max-width: 720px;
+    margin: 0 auto;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .philosophy-quote em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  /* Join */
+  .join-card {
+    background: linear-gradient(135deg, var(--ink), #243752);
+    color: white;
+    border-radius: var(--r-xl);
+    padding: var(--space-7);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .join-card::before, .join-card::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(127, 177, 224, 0.15);
+    pointer-events: none;
+  }
+  .join-card::before { width: 400px; height: 400px; top: -200px; right: -150px; }
+  .join-card::after { width: 250px; height: 250px; bottom: -100px; left: -80px; }
+  .join-card > * { position: relative; z-index: 1; }
+  .join-card h2 { color: white; margin-bottom: var(--space-3); }
+  .join-card p { opacity: 0.85; max-width: 500px; margin: 0 auto var(--space-4); }
+  .join-card .btn { background: var(--sky); color: var(--ink); }
+  .join-card .btn:hover { background: white; }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img class="logo-mark" src="assets/logo.png" alt="Dream School logo"><span>Dream</span><span>School</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="about.html">О школе</a></li>
+      <li><a href="programs.html">Программа</a></li>
+      <li><a href="teachers.html">Учителя</a></li>
+      <li><a href="news.html">Новости</a></li>
+      <li><a href="contacts.html">Контакты</a></li>
+    </ul>
+    <a href="index.html#trial" class="nav-cta">Записаться</a>
+    <button class="nav-burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-inner">
+      <span class="eyebrow fade-up">Учителя</span>
+      <h1 class="fade-up fade-up-1">
+        Люди, которые<br>
+        делают школу <em>школой</em>.
+      </h1>
+      <p class="lead fade-up fade-up-2" style="max-width: 620px;">
+        Наши педагоги — не просто специалисты с дипломами. Это живые, неравнодушные люди, которые сами растут вместе с детьми. Каждый прошёл многоступенчатый отбор и продолжает учиться.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy">
+  <div class="container">
+    <p class="philosophy-quote reveal">
+      Мы выбираем учителей,<br>
+      рядом с которыми хочется <em>расти</em>.
+    </p>
+  </div>
+</section>
+
+<!-- TEACHERS -->
+<section class="section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="eyebrow" style="justify-content: center;">Команда</span>
+      <h2 style="margin-top: var(--space-3);">Наши <em class="serif-italic" style="color: var(--accent);">педагоги</em></h2>
+    </div>
+
+    <div class="photo-note reveal">
+      <strong>Наша команда:</strong> каждый педагог не только сильный специалист, но и наставник, который помогает ребёнку раскрыться в учёбе и в жизни.
+    </div>
+
+    <div class="teachers-grid">
+      <article class="teacher-card reveal">
+        <div class="teacher-photo" data-name="Зульфия Марахимовна"><img src="teachers/photo_2_2026-04-26_22-27-35.jpg" alt="Зульфия Марахимовна, преподаватель английского языка"></div>
+        <div class="teacher-info">
+          <div class="teacher-subject">Английский язык · ведущий преподаватель</div>
+          <h3>Зульфия Марахимовна</h3>
+          <p>Спокойно и уверенно ведёт урок, умеет разговорить даже самых стеснительных учеников. В её классе всегда структурно, тепло и по-человечески.</p>
+          <div class="teacher-stats">
+            <span><strong>12</strong> лет опыта</span>
+            <span><strong>CELTA, TKT Advanced</strong></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="teacher-card reveal">
+        <div class="teacher-photo style-2" data-name="Тимур Рашидович"><img src="teachers/photo_9_2026-04-26_22-27-35.jpg" alt="Тимур Рашидович, преподаватель математики"></div>
+        <div class="teacher-info">
+          <div class="teacher-subject">Математика</div>
+          <h3>Тимур Рашидович</h3>
+          <p>Объясняет сложные темы простым языком и любит олимпиадные задачи. Поддерживает учеников, пока они не дойдут до решения самостоятельно.</p>
+          <div class="teacher-stats">
+            <span><strong>11</strong> лет опыта</span>
+            <span><strong>PhD</strong></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="teacher-card reveal">
+        <div class="teacher-photo style-3" data-name="Елена Геннадьевна"><img src="teachers/photo_1_2026-04-26_22-27-35.jpg" alt="Елена Геннадьевна, учитель начальных классов"></div>
+        <div class="teacher-info">
+          <div class="teacher-subject">Начальные классы</div>
+          <h3>Елена Геннадьевна</h3>
+          <p>Бережно сопровождает детей в первые школьные годы. Делает уроки понятными, поддерживающими и уверенными для каждого ребёнка.</p>
+          <div class="teacher-stats">
+            <span><strong>10</strong> лет опыта</span>
+            <span><strong>M.Ed</strong></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="teacher-card reveal">
+        <div class="teacher-photo style-4" data-name="James Carter"><img src="teachers/photo_8_2026-04-26_22-27-35.jpg" alt="James Carter, English Native Speaker"></div>
+        <div class="teacher-info">
+          <div class="teacher-subject">English · Native speaker</div>
+          <h3>James Carter</h3>
+          <p>Builds lively speaking classes with natural pronunciation and real communication. Students become more confident because practice feels safe and engaging.</p>
+          <div class="teacher-stats">
+            <span><strong>8</strong> years here</span>
+            <span><strong>PGCE, TEFL</strong></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="teacher-card reveal">
+        <div class="teacher-photo style-5" data-name="Жанна Владимировна"><img src="teachers/photo_10_2026-04-26_22-27-35.jpg" alt="Жанна Владимировна, преподаватель творчества и арт"></div>
+        <div class="teacher-info">
+          <div class="teacher-subject">Творчество и арт</div>
+          <h3>Жанна Владимировна</h3>
+          <p>Помогает детям выражать идеи через цвет, форму и авторские проекты. На её занятиях много свободы, фантазии и личного стиля.</p>
+          <div class="teacher-stats">
+            <span><strong>9</strong> лет в школе</span>
+            <span><strong>BFA, Art Therapy Basics</strong></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="teacher-card reveal">
+        <div class="teacher-photo" data-name="Рустам Акмалович"><img src="teachers/photo_4_2026-04-26_22-27-35.jpg" alt="Рустам Акмалович, преподаватель физкультуры и плавания"></div>
+        <div class="teacher-info">
+          <div class="teacher-subject">Физическая культура · Плавание</div>
+          <h3>Рустам Акмалович</h3>
+          <p>Энергично и безопасно выстраивает тренировки, мотивирует без давления. Учит дисциплине через интерес к движению и здоровым привычкам.</p>
+          <div class="teacher-stats">
+            <span><strong>7</strong> лет в школе</span>
+            <span><strong>NASM CPT, Swim Coach L1</strong></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="teacher-card reveal">
+        <div class="teacher-photo style-2" data-name="Алина Анваровна"><img src="teachers/photo_3_2026-04-26_22-27-35.jpg" alt="Алина Анваровна, преподаватель робототехники и IT"></div>
+        <div class="teacher-info">
+          <div class="teacher-subject">Робототехника · IT</div>
+          <h3>Алина Анваровна</h3>
+          <p>Объясняет программирование через практику и мини-проекты. Дети быстро видят, как их идея превращается в реальный работающий прототип.</p>
+          <div class="teacher-stats">
+            <span><strong>6</strong> лет в школе</span>
+            <span><strong>B.Eng, LEGO Education Trainer</strong></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="teacher-card reveal">
+        <div class="teacher-photo style-3" data-name="Екатерина Павловна"><img src="teachers/photo_6_2026-04-26_22-27-35.jpg" alt="Екатерина Павловна, преподаватель музыки"></div>
+        <div class="teacher-info">
+          <div class="teacher-subject">Музыка</div>
+          <h3>Екатерина Павловна</h3>
+          <p>Мягко раскрывает голос и музыкальный слух у каждого ребёнка. На занятиях царит поддержка, творчество и радость от выступлений.</p>
+          <div class="teacher-stats">
+            <span><strong>8</strong> лет в школе</span>
+            <span><strong>ABRSM Vocal, M.Mus</strong></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="teacher-card reveal">
+        <div class="teacher-photo style-4" data-name="Ольга Анатольевна"><img src="teachers/photo_7_2026-04-26_22-27-35.jpg" alt="Ольга Анатольевна, школьный психолог"></div>
+        <div class="teacher-info">
+          <div class="teacher-subject">EQ · Психология</div>
+          <h3>Ольга Анатольевна</h3>
+          <p>Помогает детям лучше понимать эмоции и уверенно общаться со сверстниками. Работает деликатно и в тесной связке с родителями.</p>
+          <div class="teacher-stats">
+            <span><strong>10</strong> лет в школе</span>
+            <span><strong>M.Psych, Child Counseling Cert</strong></span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN US -->
+<section class="section">
+  <div class="container">
+    <div class="join-card reveal">
+      <span class="eyebrow" style="color: var(--sky); justify-content: center;">Вакансии</span>
+      <h2 style="margin-top: var(--space-3);">Хотите работать <em class="serif-italic" style="color: var(--sky);">с нами?</em></h2>
+      <p>Мы постоянно ищем талантливых, неравнодушных педагогов. Если вы любите свою профессию и горите ею — напишите нам.</p>
+      <a href="contacts.html" class="btn">Связаться с нами <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img class="logo-mark" src="assets/logo.png" alt="Dream School logo"><span>Dream</span><span>School</span></div>
+        <p>Частная школа с углублённой программой английского и математики. Юнусабад-19, Ташкент.</p>
+      </div>
+      <div>
+        <h4>Сайт</h4>
+        <ul class="footer-list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="about.html">О школе</a></li>
+          <li><a href="programs.html">Программа</a></li>
+          <li><a href="teachers.html">Учителя</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Дополнительно</h4>
+        <ul class="footer-list">
+          <li><a href="news.html">Новости</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="index.html#trial">Пробный день</a></li>
+          <li><a href="programs.html#clubs">Кружки</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Связаться</h4>
+        <ul class="footer-list">
+          <li><a href="tel:+998957729999">+998 95 772-99-99</a></li>
+          <li><a href="tel:+998909480013">+998 90 948-00-13</a></li>
+          <li><a href="https://t.me/umkasmith">@umkasmith</a></li>
+          <li>Юнусабад-19</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Dream School. Все права защищены.</span>
+      <div class="socials">
+        <a href="https://instagram.com/dreamschooluz" target="_blank" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://t.me/dreamschooluz" target="_blank" aria-label="Telegram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 3L2 11l6 2 2 7 4-5 6 5 2-17z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

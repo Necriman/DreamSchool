@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Новости — Dream School</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* News layout */
+  .news-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+  @media (max-width: 920px) { .news-layout { grid-template-columns: 1fr; } }
+
+  /* Featured news */
+  .featured-news {
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    background: white;
+    border: 1px solid var(--line);
+    margin-bottom: var(--space-5);
+    transition: all var(--t-med);
+  }
+  .featured-news:hover { box-shadow: var(--shadow-md); border-color: var(--sky); }
+  .featured-cover {
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, var(--sky-deep), var(--accent));
+    position: relative;
+    display: grid; place-items: center;
+    color: white;
+    font-family: var(--serif); font-style: italic; font-size: 5rem; font-weight: 300;
+  }
+  .featured-cover::before {
+    content: '';
+    position: absolute;
+    inset: 24px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: var(--r-lg);
+  }
+  .featured-tag {
+    position: absolute; top: 20px; left: 20px;
+    background: rgba(255,255,255,0.95);
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: var(--r-pill);
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .featured-body { padding: var(--space-5); }
+  .featured-meta { font-size: 0.85rem; color: var(--ink-mute); margin-bottom: 12px; }
+  .featured-body h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: var(--space-3);
+  }
+  .featured-body p { color: var(--ink-soft); margin-bottom: var(--space-4); }
+
+  /* News list */
+  .news-list {
+    display: flex; flex-direction: column;
+    gap: var(--space-4);
+  }
+  .news-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    transition: all var(--t-med);
+  }
+  @media (max-width: 540px) { .news-row { grid-template-columns: 1fr; } }
+  .news-row:hover { transform: translateX(4px); border-color: var(--sky); box-shadow: var(--shadow-sm); }
+  .news-row-cover {
+    aspect-ratio: 4/3;
+    border-radius: var(--r-md);
+    background: linear-gradient(135deg, var(--bg-tint), var(--sky));
+    display: grid; place-items: center;
+    color: white; font-family: var(--serif); font-style: italic; font-size: 2.5rem;
+    position: relative;
+  }
+  .news-row-cover.style-2 { background: linear-gradient(135deg, var(--sky), var(--sky-deep)); }
+  .news-row-cover.style-3 { background: linear-gradient(135deg, var(--sky-deep), var(--accent)); }
+  .news-row-cover.style-4 { background: linear-gradient(135deg, var(--ink), #243752); }
+  .news-row-cover .row-tag {
+    position: absolute; top: 10px; left: 10px;
+    background: rgba(255,255,255,0.95);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: var(--r-pill);
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .news-row-body { display: flex; flex-direction: column; justify-content: center; }
+  .news-row-body .meta { font-size: 0.8rem; color: var(--ink-mute); margin-bottom: 6px; }
+  .news-row-body h3 { font-size: 1.2rem; margin-bottom: 8px; }
+  .news-row-body p { font-size: 0.92rem; color: var(--ink-soft); }
+
+  /* Sidebar */
+  .news-sidebar { display: flex; flex-direction: column; gap: var(--space-4); position: sticky; top: 100px; }
+  .sidebar-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: var(--space-4);
+  }
+  .sidebar-card h4 {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: var(--space-3);
+  }
+
+  /* Telegram embed */
+  .telegram-card {
+    background: linear-gradient(160deg, #229ED9 0%, #1e88c0 100%);
+    color: white;
+    border-radius: var(--r-lg);
+    padding: var(--space-4);
+    position: relative;
+    overflow: hidden;
+  }
+  .telegram-card::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 250px; height: 250px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .telegram-icon {
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.15);
+    border-radius: var(--r-md);
+    display: grid; place-items: center;
+    margin-bottom: var(--space-3);
+    position: relative; z-index: 1;
+  }
+  .telegram-card h3 {
+    color: white;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    position: relative; z-index: 1;
+  }
+  .telegram-card p {
+    opacity: 0.9;
+    font-size: 0.9rem;
+    margin-bottom: var(--space-3);
+    position: relative; z-index: 1;
+  }
+  .telegram-stats {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    margin-bottom: var(--space-3);
+    position: relative; z-index: 1;
+  }
+  .telegram-stat strong {
+    display: block;
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 1.5rem;
+  }
+  .telegram-stat span { font-size: 0.75rem; opacity: 0.85; }
+  .telegram-card .btn {
+    background: white;
+    color: #229ED9;
+    width: 100%;
+    justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .telegram-card .btn:hover { background: var(--ink); color: white; }
+
+  /* Recent posts */
+  .recent-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: var(--space-3);
+  }
+  .recent-list li {
+    padding-bottom: var(--space-3);
+    border-bottom: 1px dashed var(--line);
+  }
+  .recent-list li:last-child { border-bottom: none; padding-bottom: 0; }
+  .recent-list a {
+    display: block;
+    color: var(--ink);
+    transition: color var(--t-fast);
+  }
+  .recent-list a:hover { color: var(--accent); }
+  .recent-list .date { font-size: 0.75rem; color: var(--ink-mute); margin-bottom: 4px; }
+  .recent-list .title { font-size: 0.95rem; line-height: 1.4; }
+
+  /* Categories */
+  .cat-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .cat-list a {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    color: var(--ink-soft);
+    transition: all var(--t-fast);
+  }
+  .cat-list a:hover { background: var(--bg-soft); color: var(--accent); }
+  .cat-list .count {
+    font-size: 0.75rem;
+    background: var(--bg-soft);
+    color: var(--ink-mute);
+    padding: 2px 10px;
+    border-radius: var(--r-pill);
+  }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img class="logo-mark" src="assets/logo.png" alt="Dream School logo"><span>Dream</span><span>School</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="about.html">О школе</a></li>
+      <li><a href="programs.html">Программа</a></li>
+      <li><a href="teachers.html">Учителя</a></li>
+      <li><a href="news.html">Новости</a></li>
+      <li><a href="contacts.html">Контакты</a></li>
+    </ul>
+    <a href="index.html#trial" class="nav-cta">Записаться</a>
+    <button class="nav-burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-inner">
+      <span class="eyebrow fade-up">Новости</span>
+      <h1 class="fade-up fade-up-1">
+        Жизнь школы<br>
+        <em>день за днём</em>.
+      </h1>
+      <p class="lead fade-up fade-up-2" style="max-width: 580px;">
+        Мероприятия, объявления, важное для родителей и моменты, которые формируют атмосферу школы.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS LAYOUT -->
+<section class="section" style="padding-top: var(--space-4);">
+  <div class="container">
+    <div class="news-layout">
+
+      <!-- FEED -->
+      <main>
+        <a href="#" class="featured-news reveal">
+          <div class="featured-cover">
+            <span class="featured-tag">Главное</span>
+            ✦
+          </div>
+          <div class="featured-body">
+            <div class="featured-meta">26 апреля · 5 мин чтения · Администрация</div>
+            <h2>Профилактика сезонных заболеваний — ежедневная работа</h2>
+            <p>В школе действует комплекс мер: ежедневная уборка, проветривание, контроль самочувствия каждого ученика. Особое внимание — в периоды сезонных заболеваний. Подробнее о том, что делаем мы и как помочь дома.</p>
+            <span class="btn btn-ghost">Читать полностью <span class="btn-arrow">→</span></span>
+          </div>
+        </a>
+
+        <div class="news-list">
+          <a href="#" class="news-row reveal">
+            <div class="news-row-cover style-2">
+              <span class="row-tag">Праздник</span>
+              ✿
+            </div>
+            <div class="news-row-body">
+              <div class="meta">21 марта · 3 мин</div>
+              <h3>Навруз: танцы, песни и культуры народов</h3>
+              <p>Дети знакомятся с традициями друг друга через движение, музыку и национальные костюмы. Через такие моменты формируется уважение и принятие.</p>
+            </div>
+          </a>
+
+          <a href="#" class="news-row reveal">
+            <div class="news-row-cover style-3">
+              <span class="row-tag">Среда</span>
+              ◆
+            </div>
+            <div class="news-row-body">
+              <div class="meta">18 апреля · 4 мин</div>
+              <h3>Культура дружбы — как фундамент образования</h3>
+              <p>Мы осознанно строим среду, в которой дети соединяются, а не просто учатся рядом. Это становится их реальным преимуществом в будущем.</p>
+            </div>
+          </a>
+
+          <a href="#" class="news-row reveal">
+            <div class="news-row-cover style-4">
+              <span class="row-tag">Объявление</span>
+              ✎
+            </div>
+            <div class="news-row-body">
+              <div class="meta">10 апреля · 2 мин</div>
+              <h3>Напоминание: оплата обучения до 5-го числа</h3>
+              <p>Своевременная оплата помогает обеспечивать стабильную работу школы, планировать программы и поддерживать комфортные условия.</p>
+            </div>
+          </a>
+
+          <a href="#" class="news-row reveal">
+            <div class="news-row-cover">
+              <span class="row-tag">Здоровье</span>
+              ♥
+            </div>
+            <div class="news-row-body">
+              <div class="meta">5 апреля · 3 мин</div>
+              <h3>Гигиена и комфорт ребёнка в школе</h3>
+              <p>Важные ежедневные привычки: личная сменная обувь, индивидуальное полотенце, чистые носки. Объясняем — почему это важно.</p>
+            </div>
+          </a>
+
+          <a href="#" class="news-row reveal">
+            <div class="news-row-cover style-2">
+              <span class="row-tag">Достижение</span>
+              ★
+            </div>
+            <div class="news-row-body">
+              <div class="meta">28 марта · 4 мин</div>
+              <h3>Наши олимпиадники привезли медали</h3>
+              <p>Ученики 4-6 классов взяли пять призовых мест на городской олимпиаде по математике. Поздравляем команду и педагогов.</p>
+            </div>
+          </a>
+
+          <a href="#" class="news-row reveal">
+            <div class="news-row-cover style-3">
+              <span class="row-tag">Концерт</span>
+              ♪
+            </div>
+            <div class="news-row-body">
+              <div class="meta">15 марта · 2 мин</div>
+              <h3>Весенний концерт: голоса и дебюты</h3>
+              <p>Ученики студии вокала и музыкального ансамбля выступили перед родителями. Каждый — со своим номером и волнением.</p>
+            </div>
+          </a>
+
+          <a href="#" class="news-row reveal">
+            <div class="news-row-cover style-4">
+              <span class="row-tag">Подсказка</span>
+              ◇
+            </div>
+            <div class="news-row-body">
+              <div class="meta">8 марта · 5 мин</div>
+              <h3>Как помочь ребёнку полюбить чтение</h3>
+              <p>Простые советы от наших педагогов: с чего начать, что выбирать, как не давить и сохранить интерес на годы.</p>
+            </div>
+          </a>
+        </div>
+
+        <div style="text-align: center; margin-top: var(--space-5);">
+          <button class="btn btn-ghost">Загрузить ещё <span class="btn-arrow">↓</span></button>
+        </div>
+      </main>
+
+      <!-- SIDEBAR -->
+      <aside class="news-sidebar">
+        <!-- Telegram -->
+        <div class="telegram-card reveal">
+          <div class="telegram-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M22 3L2 11l6 2 2 7 4-5 6 5 2-17z"/></svg>
+          </div>
+          <h3>Telegram-канал</h3>
+          <p>Самые свежие новости, объявления и моменты школьной жизни — каждый день.</p>
+          <div class="telegram-stats">
+            <div class="telegram-stat"><strong>770+</strong><span>подписчиков</span></div>
+            <div class="telegram-stat"><strong>360</strong><span>видео</span></div>
+            <div class="telegram-stat"><strong>717</strong><span>фото</span></div>
+          </div>
+          <a href="https://t.me/dreamschooluz" target="_blank" class="btn">Подписаться <span class="btn-arrow">→</span></a>
+        </div>
+
+        <!-- Recent -->
+        <div class="sidebar-card reveal">
+          <h4>Свежие записи</h4>
+          <ul class="recent-list">
+            <li>
+              <a href="#">
+                <div class="date">26 апреля</div>
+                <div class="title">Профилактика сезонных заболеваний</div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <div class="date">21 марта</div>
+                <div class="title">Навруз в нашей школе</div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <div class="date">18 апреля</div>
+                <div class="title">Культура дружбы</div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <div class="date">10 апреля</div>
+                <div class="title">Напоминание об оплате</div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <div class="date">5 апреля</div>
+                <div class="title">Гигиена и комфорт ребёнка</div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Categories -->
+        <div class="sidebar-card reveal">
+          <h4>Категории</h4>
+          <ul class="cat-list">
+            <li><a href="#"><span>Объявления</span><span class="count">12</span></a></li>
+            <li><a href="#"><span>Праздники</span><span class="count">8</span></a></li>
+            <li><a href="#"><span>Здоровье</span><span class="count">6</span></a></li>
+            <li><a href="#"><span>Достижения</span><span class="count">5</span></a></li>
+            <li><a href="#"><span>Жизнь школы</span><span class="count">15</span></a></li>
+            <li><a href="#"><span>Советы</span><span class="count">9</span></a></li>
+          </ul>
+        </div>
+
+        <!-- Instagram link -->
+        <div class="sidebar-card reveal" style="text-align: center;">
+          <h4>Мы в Instagram</h4>
+          <p style="font-size: 0.9rem; color: var(--ink-soft); margin-bottom: var(--space-3);">Фото и видео из школьной жизни — ежедневно.</p>
+          <a href="https://instagram.com/dreamschooluz" target="_blank" class="btn btn-ghost" style="width: 100%; justify-content: center;">@dreamschooluz</a>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img class="logo-mark" src="assets/logo.png" alt="Dream School logo"><span>Dream</span><span>School</span></div>
+        <p>Частная школа с углублённой программой английского и математики. Юнусабад-19, Ташкент.</p>
+      </div>
+      <div>
+        <h4>Сайт</h4>
+        <ul class="footer-list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="about.html">О школе</a></li>
+          <li><a href="programs.html">Программа</a></li>
+          <li><a href="teachers.html">Учителя</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Дополнительно</h4>
+        <ul class="footer-list">
+          <li><a href="news.html">Новости</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="index.html#trial">Пробный день</a></li>
+          <li><a href="programs.html#clubs">Кружки</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Связаться</h4>
+        <ul class="footer-list">
+          <li><a href="tel:+998957729999">+998 95 772-99-99</a></li>
+          <li><a href="tel:+998909480013">+998 90 948-00-13</a></li>
+          <li><a href="https://t.me/umkasmith">@umkasmith</a></li>
+          <li>Юнусабад-19</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Dream School. Все права защищены.</span>
+      <div class="socials">
+        <a href="https://instagram.com/dreamschooluz" target="_blank" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://t.me/dreamschooluz" target="_blank" aria-label="Telegram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 3L2 11l6 2 2 7 4-5 6 5 2-17z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dream School — Обучение с интересом</title>
+<meta name="description" content="Частная школа Dream School в Ташкенте. Углублённый английский, математика, кружки. Юнусабад-19." />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+  /* ===== Hero ===== */
+  .hero {
+    padding: 64px 0 var(--space-6);
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(700px 420px at 12% 25%, rgba(134, 154, 248, 0.28), transparent 64%),
+      radial-gradient(640px 380px at 90% 15%, rgba(87, 104, 221, 0.24), transparent 62%),
+      linear-gradient(140deg, #eef1ff 0%, #f8f9ff 42%, #edf2ff 100%);
+  }
+  .hero-particles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+  .hero-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-6);
+    align-items: center;
+  }
+  @media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; gap: var(--space-5); } }
+
+  .hero h1 {
+    margin: var(--space-3) 0 var(--space-4);
+    font-size: clamp(2.75rem, 5.5vw, 5.25rem);
+  }
+  .hero-title-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+  .hero-title-word > span {
+    display: inline-block;
+    transform: translateY(110%);
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 300;
+    display: inline-block;
+    position: relative;
+  }
+  .hero h1 em::after {
+    content: none;
+  }
+  .hero-underline {
+    position: absolute;
+    left: -2px;
+    right: -4px;
+    bottom: -0.2em;
+    height: 16px;
+    width: calc(100% + 6px);
+    overflow: visible;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .hero-underline path {
+    fill: none;
+    stroke: var(--sky-deep);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.75;
+  }
+  .hero-lead { max-width: 480px; margin-bottom: var(--space-5); font-size: 1.1rem; color: var(--ink-soft); }
+  .hero-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+
+  .hero-stats {
+    display: flex;
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid rgba(102, 126, 241, 0.2);
+    margin-bottom: 8px;
+  }
+  .stat strong {
+    font-family: var(--serif);
+    font-size: 2.25rem;
+    font-weight: 300;
+    color: var(--ink);
+    display: block;
+  }
+  .stat span { font-size: 0.825rem; color: var(--ink-mute); letter-spacing: 0.05em; }
+
+  /* Hero visual — stats card */
+  .hero-visual {
+    position: relative;
+    max-width: 420px;
+    margin-left: auto;
+    z-index: 1;
+    padding-bottom: 40px;
+  }
+  .hero-main-card {
+    background: #ffffff;
+    border: 1px solid rgba(102, 126, 241, 0.14);
+    border-radius: 28px;
+    padding: 36px 32px;
+    box-shadow: 0 32px 72px rgba(27, 32, 86, 0.13), 0 4px 16px rgba(27, 32, 86, 0.06);
+    animation: floatCard 7s ease-in-out infinite;
+  }
+  @keyframes floatCard {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  .hmc-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+  }
+  .hmc-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #45c373;
+    box-shadow: 0 0 0 4px rgba(69, 195, 115, 0.22);
+    flex-shrink: 0;
+    animation: dotPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(69, 195, 115, 0.22); }
+    50% { box-shadow: 0 0 0 10px rgba(69, 195, 115, 0.06); }
+  }
+  .hmc-big { margin-bottom: 24px; }
+  .hmc-num {
+    font-family: var(--serif);
+    font-size: 5rem;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .hmc-num sup {
+    font-size: 2.4rem;
+    color: var(--accent);
+    font-style: italic;
+    vertical-align: super;
+  }
+  .hmc-lbl {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .hmc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .hmc-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .hmc-mini b {
+    font-family: var(--serif);
+    font-size: 1.55rem;
+    font-weight: 300;
+    color: var(--ink);
+    display: block;
+  }
+  .hmc-mini span {
+    font-size: 0.68rem;
+    color: var(--ink-mute);
+    line-height: 1.3;
+  }
+  .hero-quote-float {
+    position: absolute;
+    bottom: 0;
+    left: -32px;
+    background: var(--ink);
+    color: white;
+    border-radius: 22px;
+    padding: 20px 22px;
+    max-width: 254px;
+    box-shadow: 0 20px 52px rgba(27, 32, 86, 0.3);
+    animation: floatCard 5s ease-in-out infinite;
+    animation-delay: 1.8s;
+    z-index: 2;
+  }
+  .hqf-stars {
+    color: #ffc107;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .hero-quote-float p {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.95);
+    margin-bottom: 8px;
+    margin-top: 0;
+  }
+  .hqf-who {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.48);
+  }
+
+  /* ===== Marquee ===== */
+  .marquee {
+    background: var(--ink);
+    color: white;
+    padding: var(--space-4) 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .marquee-track {
+    display: flex;
+    gap: var(--space-6);
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+  .marquee-item::after {
+    content: '✦';
+    color: var(--sky);
+    font-style: normal;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ===== Values section ===== */
+  .values {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 249, 255, 0.9));
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(102, 126, 241, 0.1);
+    border-bottom: 1px solid rgba(102, 126, 241, 0.1);
+  }
+  .values-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+    align-items: end;
+    margin-bottom: var(--space-6);
+  }
+  @media (max-width: 768px) { .values-header { grid-template-columns: 1fr; } }
+  .values-header p { font-size: 1.05rem; color: var(--ink-soft); max-width: 460px; }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+  @media (max-width: 920px) { .values-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .values-grid { grid-template-columns: 1fr; } }
+
+  .value-card {
+    background: var(--white);
+    border-radius: var(--r-lg);
+    padding: var(--space-5);
+    transition: all var(--t-med);
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .value-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--sky);
+  }
+  .value-icon {
+    width: 56px; height: 56px;
+    background: var(--bg-tint);
+    border-radius: var(--r-md);
+    display: grid; place-items: center;
+    margin-bottom: var(--space-3);
+    color: var(--accent);
+    transition: background var(--t-fast), color var(--t-fast), box-shadow var(--t-fast);
+  }
+  .value-card:hover .value-icon {
+    background: var(--ink);
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(27, 32, 86, 0.22);
+  }
+  .value-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: var(--space-2);
+  }
+  .value-card p { color: var(--ink-soft); font-size: 0.95rem; }
+  .value-num {
+    display: none;
+  }
+
+  /* ===== Programs preview ===== */
+  .programs-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    background: linear-gradient(180deg, rgba(241, 245, 255, 0.9), rgba(232, 238, 255, 0.78));
+    border-radius: 26px;
+    padding: 20px;
+  }
+  @media (max-width: 768px) { .programs-preview { grid-template-columns: 1fr; } }
+  .program-card {
+    border-radius: var(--r-lg);
+    padding: var(--space-6);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform var(--t-med), box-shadow var(--t-med);
+  }
+  .program-card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 24px 44px rgba(33, 51, 133, 0.26); }
+  .program-card.eng { background: linear-gradient(140deg, #2E6FB8 0%, #15243A 100%); }
+  .program-card.math { background: linear-gradient(140deg, #7FB1E0 0%, #2E6FB8 100%); }
+  .program-card::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 220px; height: 220px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+  }
+  .program-card::after {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 320px; height: 320px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+  .program-card .symbol {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 5rem;
+    line-height: 1;
+    opacity: 0.85;
+  }
+  .program-card h3 { color: white; font-size: 2rem; margin-bottom: var(--space-2); }
+  .program-card p { opacity: 0.85; max-width: 280px; }
+  .program-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: var(--space-3);
+    font-size: 0.9rem; font-weight: 500;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+    padding-bottom: 4px;
+    align-self: flex-start;
+  }
+
+  /* ===== Trial form ===== */
+  .trial-section {
+    background: linear-gradient(160deg, #eef1ff 0%, #f4f7ff 50%, #e8eeff 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .trial-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--space-6);
+    align-items: center;
+  }
+  @media (max-width: 920px) { .trial-grid { grid-template-columns: 1fr; } }
+
+  .trial-card {
+    background: linear-gradient(160deg, rgba(232, 239, 255, 0.66) 0%, rgba(245, 248, 255, 0.74) 100%);
+    border: 1px solid rgba(102, 126, 241, 0.22);
+    border-radius: var(--r-xl);
+    padding: var(--space-6);
+    position: relative;
+  }
+  .trial-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px; right: -1px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--sky-deep), var(--accent));
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-3); }
+  @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-field label {
+    font-size: 0.825rem; font-weight: 500; color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+  .form-field input, .form-field select, .form-field textarea {
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: white;
+    transition: all var(--t-fast);
+    font-size: 0.95rem;
+  }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(46, 111, 184, 0.1);
+  }
+  .form-status {
+    margin-top: var(--space-3); padding: 12px 16px;
+    border-radius: var(--r-md); font-size: 0.9rem;
+  }
+  .form-status.is-success { background: #e8f7ee; color: #1d7c40; }
+  .form-status.is-error { background: #fdeaea; color: #c83434; }
+
+  /* ===== Testimonials ===== */
+  .testimonials {
+    background: linear-gradient(160deg, #1B2056 0%, #2c2a96 60%, #3947af 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .testimonials .eyebrow { color: rgba(175, 192, 255, 0.8); }
+  .testimonials h2 { color: white; }
+  .testimonials h2 em { color: var(--sky); }
+  .testimonials::before {
+    content: '"';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%) scale(0.85);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20rem;
+    color: rgba(255, 255, 255, 0.04);
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .testimonials.is-quote-visible::before {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    transition: transform 0.8s var(--t-med), opacity 0.8s var(--t-med);
+  }
+  .testimonial-stage { position: relative; z-index: 1; min-height: 300px; }
+  .testimonials-swiper { overflow: hidden; }
+  .testimonials-swiper .swiper-wrapper { align-items: stretch; }
+  .testimonial {
+    max-width: 720px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 248, 255, 0.88));
+    border: 1px solid rgba(102, 126, 241, 0.16);
+    border-radius: 22px;
+    padding: 28px 24px;
+    box-shadow: 0 16px 34px rgba(52, 69, 161, 0.12);
+    transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+  }
+  .testimonials-swiper .swiper-slide {
+    transform: scale(0.84);
+    filter: blur(2.5px);
+    opacity: 0.35;
+    transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+  }
+  .testimonials-swiper .swiper-slide-active {
+    transform: scale(1.04);
+    filter: blur(0);
+    opacity: 1;
+  }
+  .testimonials-swiper .swiper-slide-active .testimonial {
+    box-shadow: 0 28px 60px rgba(44, 42, 150, 0.2);
+    border-color: rgba(102, 126, 241, 0.3);
+  }
+  .testimonial blockquote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: var(--space-4);
+  }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+  .testimonial-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sky), var(--sky-deep));
+    display: grid; place-items: center;
+    color: white; font-weight: 600;
+    font-family: var(--sans);
+    transform-style: preserve-3d;
+    transition: transform var(--t-med);
+  }
+  .testimonial-avatar:hover {
+    transform: rotateY(180deg);
+  }
+  .testimonial-author strong { display: block; font-weight: 500; }
+  .testimonial-author span { font-size: 0.825rem; color: var(--ink-mute); }
+
+  .testimonial-dots {
+    display: flex; gap: 8px; justify-content: center; margin-top: var(--space-5);
+  }
+  .testimonial-dots button,
+  .testimonials .swiper-pagination-bullet {
+    width: 28px; height: 4px; border-radius: 2px;
+    background: rgba(255,255,255,0.25); transition: all var(--t-fast);
+    opacity: 1;
+  }
+  .testimonial-dots button.is-active,
+  .testimonials .swiper-pagination-bullet-active { background: rgba(255,255,255,0.9); width: 44px; }
+
+  /* ===== News preview ===== */
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(243, 247, 255, 0.95));
+    border-radius: 26px;
+    padding: 18px;
+  }
+  @media (max-width: 920px) { .news-grid { grid-template-columns: 1fr; } }
+  .news-card {
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: white;
+    transition: all var(--t-med);
+    display: flex; flex-direction: column;
+  }
+  .news-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--sky);
+    box-shadow: var(--shadow-md);
+  }
+  .news-cover {
+    aspect-ratio: 16/10;
+    background: linear-gradient(135deg, var(--bg-tint), var(--sky));
+    position: relative;
+    display: grid; place-items: center;
+    color: white;
+    font-family: var(--serif); font-style: italic; font-size: 2rem;
+    overflow: hidden;
+  }
+  .news-cover::after {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.24), transparent 60%);
+    transform: translateY(var(--news-parallax, 0px));
+    will-change: transform;
+  }
+  .news-cover.cover-2 { background: linear-gradient(135deg, var(--sky), var(--sky-deep)); }
+  .news-cover.cover-3 { background: linear-gradient(135deg, var(--sky-deep), var(--accent)); }
+  .news-tag {
+    position: absolute; top: 16px; left: 16px;
+    background: rgba(255,255,255,0.95);
+    padding: 4px 12px;
+    border-radius: var(--r-pill);
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    z-index: 1;
+  }
+  .news-symbol {
+    position: relative;
+    z-index: 1;
+    transition: transform var(--t-med);
+    will-change: transform;
+  }
+  .news-card:hover .news-symbol {
+    transform: rotate(18deg) scale(1.08);
+  }
+  .news-body { padding: var(--space-4); flex-grow: 1; display: flex; flex-direction: column; }
+  .news-meta { font-size: 0.8rem; color: var(--ink-mute); margin-bottom: 8px; }
+  .news-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
+  .news-card p { color: var(--ink-soft); font-size: 0.9rem; flex-grow: 1; }
+  .news-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: var(--space-3);
+    color: var(--accent); font-weight: 500; font-size: 0.9rem;
+  }
+
+  /* CTA banner */
+  .cta-banner {
+    background: linear-gradient(135deg, #1f3655, #2b4c73, #315c8e);
+    background-size: 180% 180%;
+    border-radius: var(--r-xl);
+    padding: var(--space-6) var(--space-7);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .cta-banner::before, .cta-banner::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    pointer-events: none;
+  }
+  .cta-banner::before { width: 400px; height: 400px; top: -200px; right: -150px; }
+  .cta-banner::after { width: 250px; height: 250px; bottom: -100px; left: -80px; border-color: rgba(127, 177, 224, 0.2); }
+  .cta-banner h2 { color: white; margin-bottom: var(--space-3); position: relative; z-index: 1; }
+  .cta-banner p { opacity: 0.85; max-width: 500px; margin: 0 auto var(--space-4); position: relative; z-index: 1; }
+  .cta-banner .btn { background: white; color: var(--ink); position: relative; z-index: 1; }
+  .cta-banner .btn:hover { background: var(--sky); color: var(--ink); }
+  .cta-banner .btn {
+    animation: softPulse 3s ease-in-out infinite;
+  }
+  @keyframes softPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(188, 215, 242, 0); }
+    50% { transform: scale(1.02); box-shadow: 0 0 0 8px rgba(188, 215, 242, 0.08); }
+  }
+  @keyframes gradientDrift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .cta-banner.is-animated {
+    animation: gradientDrift 16s ease-in-out infinite;
+  }
+
+  @media (max-width: 920px) {
+    .hero-visual {
+      max-width: 340px;
+      margin: 0 auto;
+      padding-bottom: 48px;
+    }
+    .hero-main-card {
+      padding: 28px 24px;
+    }
+    .hmc-num { font-size: 4rem; }
+    .hero-quote-float {
+      left: -12px;
+      max-width: 220px;
+      padding: 16px 18px;
+    }
+    .hero { padding: 48px 0 var(--space-5); }
+    .programs-preview,
+    .news-grid { padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img class="logo-mark" src="assets/logo.png" alt="Dream School logo">
+      <span>Dream</span>
+      <span>School</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="about.html">О школе</a></li>
+      <li><a href="programs.html">Программа</a></li>
+      <li><a href="teachers.html">Учителя</a></li>
+      <li><a href="news.html">Новости</a></li>
+      <li><a href="contacts.html">Контакты</a></li>
+    </ul>
+    <a href="#trial" class="nav-cta">Записаться</a>
+    <button class="nav-burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" data-aura="warm">
+  <canvas class="hero-particles" aria-hidden="true"></canvas>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow fade-up">Частная школа · Юнусабад-19</span>
+        <h1 class="fade-up fade-up-1" data-hero-title>
+          <span class="hero-title-word"><span>Обучение,</span></span><br>
+          <span class="hero-title-word"><span>в</span></span>
+          <span class="hero-title-word"><span>котором</span></span><br>
+          <span class="hero-title-word"><span>ребёнок</span></span>
+          <span class="hero-title-word"><span><em>растёт
+            <svg class="hero-underline" viewBox="0 0 160 20" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M4 14 C42 4, 118 20, 156 10"></path>
+            </svg>
+          </em>.</span></span>
+        </h1>
+        <p class="hero-lead fade-up fade-up-2">
+          Dream School — пространство, где английский, математика и кружки соединяются с настоящей культурой дружбы, эмоциональным интеллектом и заботой о каждом ребёнке.
+        </p>
+        <div class="hero-actions fade-up fade-up-3">
+          <a href="#trial" class="btn btn-primary">Записаться на пробный день <span class="btn-arrow">→</span></a>
+          <a href="programs.html" class="btn btn-ghost">Узнать о программе</a>
+        </div>
+      </div>
+      <div class="hero-visual fade-up fade-up-2">
+        <div class="hero-main-card">
+          <div class="hmc-header">
+            <span class="hmc-dot"></span>
+            Идёт набор · 2026/27
+          </div>
+          <div class="hmc-big">
+            <div class="hmc-num">770<sup>+</sup></div>
+            <div class="hmc-lbl">семей уже с нами</div>
+          </div>
+          <div class="hmc-grid">
+            <div class="hmc-mini"><b>10+</b><span>лет опыта</span></div>
+            <div class="hmc-mini"><b>15</b><span>детей в классе</span></div>
+            <div class="hmc-mini"><b>9</b><span>педагогов</span></div>
+          </div>
+        </div>
+        <div class="hero-quote-float">
+          <div class="hqf-stars">★★★★★</div>
+          <p>«Сын каждое утро бежит в школу»</p>
+          <div class="hqf-who">— Азиза Т., мама ученика</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">Английский с 1 класса</span>
+    <span class="marquee-item">Углублённая математика</span>
+    <span class="marquee-item">Эмоциональный интеллект</span>
+    <span class="marquee-item">Творческие кружки</span>
+    <span class="marquee-item">Малые группы</span>
+    <span class="marquee-item">Английский с 1 класса</span>
+    <span class="marquee-item">Углублённая математика</span>
+    <span class="marquee-item">Эмоциональный интеллект</span>
+    <span class="marquee-item">Творческие кружки</span>
+    <span class="marquee-item">Малые группы</span>
+  </div>
+</div>
+
+<!-- ============ VALUES ============ -->
+<section class="section values surface-light">
+  <div class="container">
+    <div class="values-header">
+      <div>
+        <span class="eyebrow">Наши ценности</span>
+        <h2 style="margin-top: var(--space-3);">Не просто школа —<br><em class="serif-italic" style="color: var(--accent);">пространство роста</em></h2>
+      </div>
+      <p>Мы осознанно строим среду, в которой формируется личность: гибкое мышление, тёплые связи и интерес к миру. Это становится реальным преимуществом ребёнка во взрослой жизни.</p>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-num">01</div>
+        <div class="value-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+        <h3>Культура дружбы</h3>
+        <p>Уважение и принятие — не правила из учебника, а ежедневная среда. Дети учатся слышать друг друга и работать в команде.</p>
+      </div>
+
+      <div class="value-card reveal">
+        <div class="value-num">02</div>
+        <div class="value-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <h3>Сильная программа</h3>
+        <p>Углублённый английский и математика, индивидуальный темп для каждого. Знания, которые становятся инструментом мышления.</p>
+      </div>
+
+      <div class="value-card reveal">
+        <div class="value-num">03</div>
+        <div class="value-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
+          </svg>
+        </div>
+        <h3>Безопасная среда</h3>
+        <p>Чистота, забота о здоровье и комфорте — каждый день. Тёплая атмосфера, в которой ребёнок чувствует себя уверенно.</p>
+      </div>
+
+      <div class="value-card reveal">
+        <div class="value-num">04</div>
+        <div class="value-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </div>
+        <h3>Эмоциональный интеллект</h3>
+        <p>Учим понимать себя и других — навыкам, которые остаются с человеком на всю жизнь и формируют сильные отношения.</p>
+      </div>
+
+      <div class="value-card reveal">
+        <div class="value-num">05</div>
+        <div class="value-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h3>Мультикультурность</h3>
+        <p>Знакомим детей с разными культурами через песни, традиции, языки. Учим видеть ценность в разнообразии.</p>
+      </div>
+
+      <div class="value-card reveal">
+        <div class="value-num">06</div>
+        <div class="value-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+          </svg>
+        </div>
+        <h3>Кружки и развитие</h3>
+        <p>От плавания до творческих мастерских — пространство, где ребёнок находит своё.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROGRAMS PREVIEW ============ -->
+<section class="section surface-soft" data-aura="mint">
+  <div class="container">
+    <div class="values-header">
+      <div>
+        <span class="eyebrow">Программа обучения</span>
+        <h2 style="margin-top: var(--space-3);">Два сильных<br><em class="serif-italic" style="color: var(--accent);">фундамента</em></h2>
+      </div>
+      <p>Английский — как окно в мир и инструмент мышления. Математика — как язык логики и структуры. И то, и другое — на углублённом уровне.</p>
+    </div>
+
+    <div class="programs-preview">
+      <div class="program-card eng reveal">
+        <div>
+          <div class="symbol" data-symbol>A</div>
+          <h3>Английский язык</h3>
+          <p>Ежедневные занятия, носители языка, проектное обучение. К концу начальной школы дети уверенно говорят и читают.</p>
+        </div>
+        <a href="programs.html" class="program-link">Подробнее о программе <span>→</span></a>
+      </div>
+      <div class="program-card math reveal">
+        <div>
+          <div class="symbol" data-symbol>π</div>
+          <h3>Математика</h3>
+          <p>Развитие логики, олимпиадные задачи, ментальная арифметика. Учим думать, а не зубрить.</p>
+        </div>
+        <a href="programs.html" class="program-link">Подробнее о программе <span>→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRIAL FORM ============ -->
+<section class="section trial-section surface-light" id="trial">
+  <div class="container">
+    <div class="trial-grid">
+      <div class="reveal">
+        <span class="eyebrow">Пробный день</span>
+        <h2 style="margin-top: var(--space-3); margin-bottom: var(--space-3);">Приходите познакомиться <em class="serif-italic" style="color: var(--accent);">бесплатно</em></h2>
+        <p class="lead">Один день в школе — лучший способ почувствовать атмосферу. Ребёнок попробует уроки, познакомится с педагогами и одноклассниками. Вы — увидите всё своими глазами.</p>
+        <div class="divider"></div>
+        <p style="font-size: 0.95rem; color: var(--ink-soft);">
+          После заявки наш менеджер свяжется с вами в течение дня и подберёт удобную дату.
+        </p>
+      </div>
+
+      <div class="trial-card reveal">
+        <form data-trial-form>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="parent">Имя родителя*</label>
+              <input id="parent" name="parent" type="text" placeholder="Как к вам обращаться" required>
+            </div>
+            <div class="form-field">
+              <label for="phone">Телефон*</label>
+              <input id="phone" name="phone" type="tel" placeholder="+998 ___ ___-__-__" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="child">Имя ребёнка*</label>
+              <input id="child" name="child" type="text" placeholder="Имя" required>
+            </div>
+            <div class="form-field">
+              <label for="age">Класс / Возраст</label>
+              <select id="age" name="age">
+                <option>Подготовительный</option>
+                <option>1 класс</option>
+                <option>2 класс</option>
+                <option>3 класс</option>
+                <option>4 класс</option>
+                <option>5+ класс</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field" style="margin-bottom: var(--space-3);">
+            <label for="msg">Комментарий</label>
+            <textarea id="msg" name="msg" rows="3" placeholder="Если есть пожелания — напишите"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" data-ripple-btn style="width: 100%; justify-content: center;">
+            Отправить заявку <span class="btn-arrow">→</span>
+          </button>
+          <div data-form-status class="form-status"></div>
+          <p style="font-size: 0.8rem; color: var(--ink-mute); text-align: center; margin-top: var(--space-3);">
+            Нажимая «Отправить», вы соглашаетесь на обработку персональных данных
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="section testimonials surface-soft" data-aura="lavender">
+  <div class="container">
+    <span class="eyebrow" style="justify-content: center; color: rgba(175, 192, 255, 0.8);">Отзывы родителей</span>
+    <h2 style="margin-top: var(--space-3); margin-bottom: var(--space-6); color: white;">Что говорят те,<br><em class="serif-italic" style="color: var(--sky);">кто уже с нами</em></h2>
+
+    <div class="testimonial-stage testimonials-swiper swiper">
+      <div class="swiper-wrapper">
+      <div class="testimonial swiper-slide" data-testimonial>
+        <blockquote>«За год дочка раскрылась как человек: появилась уверенность, друзья, английский. Чувствуется, что в школе действительно заботятся, а не просто учат программу.»</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">МК</div>
+          <div>
+            <strong>Мадина Каримова</strong>
+            <span>Мама ученицы 2 класса</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial swiper-slide" data-testimonial>
+        <blockquote>«Сын каждое утро бежит в школу. Это, наверное, самое честное, что я могу сказать о Dream School. Учителя живые, программа интересная, среда тёплая.»</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">АТ</div>
+          <div>
+            <strong>Азиза Турсунова</strong>
+            <span>Мама ученика 1 класса</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial swiper-slide" data-testimonial>
+        <blockquote>«Ценим, что школа делает упор не только на знания, но и на эмоциональный интеллект. Это редкость, и это реально работает — мы видим дома.»</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">ДА</div>
+          <div>
+            <strong>Дильшод Ахмедов</strong>
+            <span>Папа ученика 3 класса</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial swiper-slide" data-testimonial>
+        <blockquote>«Понравился подход к мультикультурности — Навруз, праздники, разные языки. Дети растут, понимая, что мир большой и разный, и это здорово.»</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">НС</div>
+          <div>
+            <strong>Нодира Саидова</strong>
+            <span>Мама ученицы 4 класса</span>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+    <div class="testimonial-dots swiper-pagination"></div>
+  </div>
+</section>
+
+<!-- ============ NEWS PREVIEW ============ -->
+<section class="section surface-light">
+  <div class="container">
+    <div class="values-header">
+      <div>
+        <span class="eyebrow">Жизнь школы</span>
+        <h2 style="margin-top: var(--space-3);">Свежие <em class="serif-italic" style="color: var(--accent);">новости</em></h2>
+      </div>
+      <a href="news.html" class="btn btn-ghost" style="align-self: end;">Все новости <span class="btn-arrow">→</span></a>
+    </div>
+
+    <div class="news-grid">
+      <article class="news-card reveal">
+        <div class="news-cover">
+          <span class="news-tag">Объявление</span>
+          <span class="news-symbol">✦</span>
+        </div>
+        <div class="news-body">
+          <div class="news-meta">26 апреля · 2 мин чтения</div>
+          <h3>Профилактика сезонных заболеваний</h3>
+          <p>Напоминаем о ежедневных мерах: чистота помещений, проветривание, забота о самочувствии каждого ученика.</p>
+          <a href="news.html" class="news-link">Читать <span>→</span></a>
+        </div>
+      </article>
+
+      <article class="news-card reveal">
+        <div class="news-cover cover-2">
+          <span class="news-tag">Праздник</span>
+          <span class="news-symbol">✿</span>
+        </div>
+        <div class="news-body">
+          <div class="news-meta">21 марта · 3 мин чтения</div>
+          <h3>Навруз: танцы, культуры, традиции</h3>
+          <p>Дети знакомятся с культурами друг друга через движение, музыку и национальные костюмы.</p>
+          <a href="news.html" class="news-link">Читать <span>→</span></a>
+        </div>
+      </article>
+
+      <article class="news-card reveal">
+        <div class="news-cover cover-3">
+          <span class="news-tag">Среда</span>
+          <span class="news-symbol">◆</span>
+        </div>
+        <div class="news-body">
+          <div class="news-meta">18 апреля · 2 мин чтения</div>
+          <h3>Культура дружбы как фундамент</h3>
+          <p>О том, как мы осознанно строим среду, где дети соединяются, а не просто учатся рядом.</p>
+          <a href="news.html" class="news-link">Читать <span>→</span></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BANNER ============ -->
+<section class="section">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <span class="eyebrow" style="color: var(--sky); justify-content: center;">Идёт набор · 2026/27</span>
+      <h2 style="margin-top: var(--space-3);">Запишитесь на пробный день <em class="serif-italic" style="color: var(--sky);">сегодня</em></h2>
+      <p>Лучшие классы заполняются первыми. Один день в Dream School — и вы увидите, насколько другая может быть школа.</p>
+      <a href="#trial" class="btn btn-light">Оставить заявку <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <img class="logo-mark" src="assets/logo.png" alt="Dream School logo">
+          <span>Dream</span>
+          <span>School</span>
+        </div>
+        <p>Частная школа с углублённой программой английского и математики. Юнусабад-19, Ташкент.</p>
+      </div>
+
+      <div>
+        <h4>Сайт</h4>
+        <ul class="footer-list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="about.html">О школе</a></li>
+          <li><a href="programs.html">Программа</a></li>
+          <li><a href="teachers.html">Учителя</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Дополнительно</h4>
+        <ul class="footer-list">
+          <li><a href="news.html">Новости</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="#trial">Пробный день</a></li>
+          <li><a href="programs.html#clubs">Кружки</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Связаться</h4>
+        <ul class="footer-list">
+          <li><a href="tel:+998957729999">+998 95 772-99-99</a></li>
+          <li><a href="tel:+998909480013">+998 90 948-00-13</a></li>
+          <li><a href="https://t.me/umkasmith">@umkasmith</a></li>
+          <li>Юнусабад-19</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Dream School. Все права защищены.</span>
+      <div class="socials">
+        <a href="https://instagram.com/dreamschooluz" target="_blank" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+        <a href="https://t.me/dreamschooluz" target="_blank" aria-label="Telegram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M22 3L2 11l6 2 2 7 4-5 6 5 2-17z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
