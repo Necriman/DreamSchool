@@ -48,7 +48,6 @@
   }
   .hero-title-word > span {
     display: inline-block;
-    transform: translateY(110%);
   }
   .hero h1 em {
     font-style: italic;
@@ -433,7 +432,147 @@
   .form-status.is-success { background: #e8f7ee; color: #1d7c40; }
   .form-status.is-error { background: #fdeaea; color: #c83434; }
 
-  /* ===== Testimonials ===== */
+  /* ===== Role tabs ===== */
+  .role-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: var(--space-6);
+  }
+  @media (max-width: 640px) { .role-tabs { grid-template-columns: 1fr; } }
+  .role-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 18px 20px;
+    border-radius: var(--r-lg);
+    border: 2px solid var(--line);
+    background: white;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast);
+    outline: none;
+  }
+  .role-tab__icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: var(--bg-tint);
+    display: grid; place-items: center;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+    transition: background var(--t-fast), color var(--t-fast);
+    flex-shrink: 0;
+  }
+  .role-tab__title { font-weight: 600; font-size: 0.95rem; color: var(--ink); display: block; }
+  .role-tab__sub { font-size: 0.78rem; color: var(--ink-mute); line-height: 1.4; display: block; }
+  .role-tab:hover:not(.is-active) { border-color: rgba(102,126,241,0.4); background: var(--bg-soft); }
+  .role-tab.is-active {
+    border-color: var(--sky-deep);
+    background: rgba(102,126,241,0.06);
+    box-shadow: 0 4px 16px rgba(102,126,241,0.14);
+  }
+  .role-tab.is-active .role-tab__icon { background: var(--sky-deep); color: white; }
+  .role-tab.is-active .role-tab__title { color: var(--sky-deep); }
+  .role-tab:focus-visible { box-shadow: 0 0 0 3px rgba(102,126,241,0.3); }
+
+  /* ===== Trial forms (per-role) ===== */
+  @keyframes trialFormIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .trial-form { display: none; }
+  .trial-form.is-active { display: block; animation: trialFormIn 0.3s ease forwards; }
+
+  /* ===== Field-level validation ===== */
+  .form-field.has-error input,
+  .form-field.has-error select,
+  .form-field.has-error textarea {
+    border-color: #e03434;
+    box-shadow: 0 0 0 3px rgba(224,52,52,0.08);
+  }
+  .form-error { font-size: 0.78rem; color: #e03434; display: none; }
+  .form-field.has-error .form-error { display: block; }
+  .form-consent { font-size: 0.78rem; color: var(--ink-mute); text-align: center; margin-top: var(--space-3); }
+
+  /* ===== Checkboxes ===== */
+  .form-checkboxes { display: flex; gap: var(--space-3); flex-wrap: wrap; padding: 8px 0; }
+  .form-checkbox { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--ink-soft); cursor: pointer; }
+  .form-checkbox input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
+
+  /* ===== Disabled submit ===== */
+  .btn-primary:disabled {
+    opacity: 0.45; cursor: not-allowed;
+    pointer-events: none; box-shadow: none;
+  }
+
+  /* ===== Success screen ===== */
+  .trial-success {
+    text-align: center;
+    padding: var(--space-5) var(--space-4);
+    animation: trialFormIn 0.4s ease forwards;
+  }
+  .trial-success__check {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: #e8f7ee;
+    color: #1d7c40;
+    display: grid; place-items: center;
+    margin: 0 auto var(--space-4);
+  }
+  .trial-success__check svg { width: 28px; height: 28px; }
+  .trial-success__title { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: var(--ink); margin-bottom: var(--space-3); }
+  .trial-success__text { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.6; max-width: 340px; margin: 0 auto var(--space-5); }
+
+  /* ===== Form hint ===== */
+  .form-hint { font-size: 0.76rem; color: var(--ink-mute); line-height: 1.4; }
+
+  /* ===== File drop zone ===== */
+  .file-drop {
+    position: relative;
+    border: 2px dashed var(--line);
+    border-radius: var(--r-md);
+    background: white;
+    cursor: pointer;
+    transition: border-color var(--t-fast), background var(--t-fast);
+    min-height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .file-drop:hover:not(.has-file) { border-color: var(--sky-deep); border-style: solid; background: rgba(102,126,241,0.03); }
+  .file-drop.is-over { border-color: var(--sky-deep); border-style: solid; background: rgba(102,126,241,0.07); }
+  .file-drop.has-file { border-style: solid; border-color: rgba(102,126,241,0.4); cursor: default; }
+  .file-drop.has-error-state { border-color: #e03434; border-style: solid; }
+  .file-drop__input {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .file-drop.has-file .file-drop__input { pointer-events: none; }
+  .file-drop__prompt {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 24px 16px; text-align: center; pointer-events: none; width: 100%;
+  }
+  .file-drop__icon { color: var(--ink-mute); }
+  .file-drop__text { font-size: 0.875rem; color: var(--ink-soft); line-height: 1.5; }
+  .file-drop__link { color: var(--accent); text-decoration: underline; cursor: pointer; }
+  .file-drop__preview {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px; width: 100%;
+  }
+  .file-drop__file-icon { color: var(--accent); flex-shrink: 0; }
+  .file-drop__filename { font-size: 0.875rem; font-weight: 500; color: var(--ink); flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-drop__filesize { font-size: 0.78rem; color: var(--ink-mute); flex-shrink: 0; white-space: nowrap; }
+  .file-drop__remove {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid var(--line); background: white;
+    display: grid; place-items: center; color: var(--ink-soft);
+    cursor: pointer; flex-shrink: 0;
+    transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+  }
+  .file-drop__remove:hover { background: #fdeaea; border-color: #e03434; color: #e03434; }
+
+  /* ===== Testimonials carousel (rebuilt) ===== */
   .testimonials {
     background: linear-gradient(160deg, #1B2056 0%, #2c2a96 60%, #3947af 100%);
     text-align: center;
@@ -443,94 +582,137 @@
   .testimonials .eyebrow { color: rgba(175, 192, 255, 0.8); }
   .testimonials h2 { color: white; }
   .testimonials h2 em { color: var(--sky); }
-  .testimonials::before {
-    content: '"';
-    position: absolute;
-    top: -60px; left: 50%;
-    transform: translateX(-50%) scale(0.85);
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 20rem;
-    color: rgba(255, 255, 255, 0.04);
-    line-height: 1;
-    opacity: 0;
-    pointer-events: none;
+
+  .tcl {
+    position: relative;
+    margin-top: var(--space-6);
+    padding: 8px 64px 56px;
+    overflow: hidden;
   }
-  .testimonials.is-quote-visible::before {
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
-    transition: transform 0.8s var(--t-med), opacity 0.8s var(--t-med);
+  .tcl__viewport {
+    overflow: visible;
+    width: 100%;
   }
-  .testimonial-stage { position: relative; z-index: 1; min-height: 300px; }
-  .testimonials-swiper { overflow: hidden; }
-  .testimonials-swiper .swiper-wrapper { align-items: stretch; }
-  .testimonial {
-    max-width: 720px;
-    margin: 0 auto;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 248, 255, 0.88));
-    border: 1px solid rgba(102, 126, 241, 0.16);
-    border-radius: 22px;
-    padding: 28px 24px;
-    box-shadow: 0 16px 34px rgba(52, 69, 161, 0.12);
-    transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+  .tcl__viewport .swiper-wrapper {
+    align-items: stretch;
+    box-sizing: content-box;
   }
-  .testimonials-swiper .swiper-slide {
-    transform: scale(0.84);
-    filter: blur(2.5px);
+  .tcl__viewport .swiper-slide {
+    height: auto;
+    display: flex;
+    transform: scale(0.9);
     opacity: 0.35;
-    transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+    transition: transform 0.55s ease, opacity 0.55s ease;
+    will-change: transform, opacity;
   }
-  .testimonials-swiper .swiper-slide-active {
-    transform: scale(1.04);
-    filter: blur(0);
+  .tcl__viewport .swiper-slide-active {
+    transform: scale(1);
     opacity: 1;
   }
-  .testimonials-swiper .swiper-slide-active .testimonial {
-    box-shadow: 0 28px 60px rgba(44, 42, 150, 0.2);
-    border-color: rgba(102, 126, 241, 0.3);
+
+  .tcl-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 36px 32px;
+    width: 100%;
+    box-shadow: 0 18px 40px rgba(20, 24, 70, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    text-align: left;
   }
-  .testimonial blockquote {
+  .tcl-card__quote {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-    line-height: 1.5;
+    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+    line-height: 1.55;
     color: var(--ink);
-    margin-bottom: var(--space-4);
+    margin: 0;
   }
-  .testimonial-author {
+  .tcl-card__author {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: var(--space-3);
+    gap: 14px;
   }
-  .testimonial-avatar {
-    width: 48px; height: 48px;
+  .tcl-card__avatar {
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--sky), var(--sky-deep));
-    display: grid; place-items: center;
-    color: white; font-weight: 600;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    flex-shrink: 0;
     font-family: var(--sans);
-    transform-style: preserve-3d;
-    transition: transform var(--t-med);
   }
-  .testimonial-avatar:hover {
-    transform: rotateY(180deg);
-  }
-  .testimonial-author strong { display: block; font-weight: 500; }
-  .testimonial-author span { font-size: 0.825rem; color: var(--ink-mute); }
+  .tcl-card__meta { display: flex; flex-direction: column; gap: 2px; }
+  .tcl-card__name { font-weight: 600; color: var(--ink); font-size: 0.95rem; }
+  .tcl-card__role { font-size: 0.825rem; color: var(--ink-mute); }
 
-  .testimonial-dots {
-    display: flex; gap: 8px; justify-content: center; margin-top: var(--space-5);
+  .tcl__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: white;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
-  .testimonial-dots button,
-  .testimonials .swiper-pagination-bullet {
-    width: 28px; height: 4px; border-radius: 2px;
-    background: rgba(255,255,255,0.25); transition: all var(--t-fast);
+  .tcl__arrow:hover {
+    background: rgba(255, 255, 255, 0.24);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-50%) scale(1.08);
+  }
+  .tcl__arrow:active { transform: translateY(-50%) scale(0.96); }
+  .tcl__arrow svg { width: 22px; height: 22px; display: block; }
+  .tcl__arrow--prev { left: 0; }
+  .tcl__arrow--next { right: 0; }
+
+  .tcl__dots {
+    position: relative;
+    margin-top: 32px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    line-height: 0;
+  }
+  .tcl__dots .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
     opacity: 1;
+    margin: 0 !important;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease, width 0.25s ease;
   }
-  .testimonial-dots button.is-active,
-  .testimonials .swiper-pagination-bullet-active { background: rgba(255,255,255,0.9); width: 44px; }
+  .tcl__dots .swiper-pagination-bullet-active {
+    background: rgba(255, 255, 255, 0.95);
+    width: 26px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 1023px) {
+    .tcl { padding: 0 56px; }
+  }
+  @media (max-width: 767px) {
+    .tcl { padding: 0; }
+    .tcl__arrow { display: none; }
+    .tcl-card { padding: 28px 22px; gap: 20px; }
+  }
 
   /* ===== News preview ===== */
   .news-grid {
@@ -662,6 +844,44 @@
     .programs-preview,
     .news-grid { padding: 10px; }
   }
+
+  /* ===== Hero Trust ===== */
+  .hero-trust {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+  .hero-trust__avatars {
+    display: flex;
+    align-items: center;
+  }
+  .hero-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+    display: grid;
+    place-items: center;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-left: -10px;
+    box-shadow: 0 2px 8px rgba(27, 32, 86, 0.12);
+  }
+  .hero-avatar:first-child { margin-left: 0; }
+  .hero-avatar:nth-child(1) { background: linear-gradient(135deg, #c5d2ff, #dce6ff); }
+  .hero-avatar:nth-child(2) { background: linear-gradient(135deg, #bcd7f2, #d4e8ff); }
+  .hero-avatar:nth-child(3) { background: linear-gradient(135deg, #afc0ff, #c8d4ff); }
+  .hero-avatar--more { background: var(--ink); color: white; font-size: 0.6rem; }
+  .hero-trust__text { display: flex; flex-direction: column; gap: 2px; }
+  .hero-trust__rating { font-size: 0.875rem; font-weight: 500; color: var(--ink); display: flex; align-items: center; gap: 6px; }
+  .hero-trust__stars { color: #E8A93C; letter-spacing: 1px; font-size: 0.78rem; }
+  .hero-trust__score { color: var(--ink-soft); font-weight: 400; }
+  .hero-trust__caption { font-size: 0.78rem; color: var(--ink-mute); }
+  @media (max-width: 480px) {
+    .hero-trust { flex-wrap: wrap; gap: var(--space-3); }
+  }
 </style>
 </head>
 <body>
@@ -711,6 +931,21 @@
         <div class="hero-actions fade-up fade-up-3">
           <a href="#trial" class="btn btn-primary">Записаться на пробный день <span class="btn-arrow">→</span></a>
           <a href="programs.html" class="btn btn-ghost">Узнать о программе</a>
+        </div>
+        <div class="hero-trust fade-up fade-up-4">
+          <div class="hero-trust__avatars">
+            <div class="hero-avatar">МК</div>
+            <div class="hero-avatar">АТ</div>
+            <div class="hero-avatar">ДА</div>
+            <div class="hero-avatar hero-avatar--more">+770</div>
+          </div>
+          <div class="hero-trust__text">
+            <div class="hero-trust__rating">
+              <span class="hero-trust__stars">★★★★★</span>
+              <span class="hero-trust__score">4.9 из 5</span>
+            </div>
+            <div class="hero-trust__caption">На основе отзывов родителей</div>
+          </div>
         </div>
       </div>
       <div class="hero-visual fade-up fade-up-2">
@@ -871,117 +1106,354 @@
 <!-- ============ TRIAL FORM ============ -->
 <section class="section trial-section surface-light" id="trial">
   <div class="container">
+
+    <!-- Role selector -->
+    <div class="role-tabs" role="tablist" aria-label="Тип обращения">
+      <button class="role-tab is-active" data-role="parent" role="tab" aria-selected="true" tabindex="0">
+        <span class="role-tab__icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
+        <strong class="role-tab__title">Я родитель</strong>
+        <span class="role-tab__sub">Хочу записать ребёнка на пробный день</span>
+      </button>
+      <button class="role-tab" data-role="teacher" role="tab" aria-selected="false" tabindex="-1">
+        <span class="role-tab__icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </span>
+        <strong class="role-tab__title">Я учитель</strong>
+        <span class="role-tab__sub">Хочу присоединиться к команде</span>
+      </button>
+      <button class="role-tab" data-role="partner" role="tab" aria-selected="false" tabindex="-1">
+        <span class="role-tab__icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </span>
+        <strong class="role-tab__title">Партнёрство</strong>
+        <span class="role-tab__sub">Сотрудничество, мероприятия, СМИ</span>
+      </button>
+    </div>
+
+    <!-- Content grid -->
     <div class="trial-grid">
-      <div class="reveal">
-        <span class="eyebrow">Пробный день</span>
-        <h2 style="margin-top: var(--space-3); margin-bottom: var(--space-3);">Приходите познакомиться <em class="serif-italic" style="color: var(--accent);">бесплатно</em></h2>
-        <p class="lead">Один день в школе — лучший способ почувствовать атмосферу. Ребёнок попробует уроки, познакомится с педагогами и одноклассниками. Вы — увидите всё своими глазами.</p>
+
+      <!-- Left: dynamic info -->
+      <div class="trial-info reveal">
+        <span class="eyebrow trial-eyebrow">Пробный день</span>
+        <h2 data-trial-title style="margin-top:var(--space-3);margin-bottom:var(--space-3);">
+          Запишитесь на <em class="serif-italic" style="color:var(--accent)">пробный день</em>
+        </h2>
+        <p class="lead" data-trial-subtitle>Познакомимся, покажем школу, ответим на вопросы</p>
         <div class="divider"></div>
-        <p style="font-size: 0.95rem; color: var(--ink-soft);">
+        <p data-trial-note style="font-size:0.95rem;color:var(--ink-soft);">
           После заявки наш менеджер свяжется с вами в течение дня и подберёт удобную дату.
         </p>
       </div>
 
+      <!-- Right: form card -->
       <div class="trial-card reveal">
-        <form data-trial-form>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="parent">Имя родителя*</label>
-              <input id="parent" name="parent" type="text" placeholder="Как к вам обращаться" required>
+
+        <div data-trial-form-wrap>
+
+          <!-- РОДИТЕЛЬ -->
+          <form class="trial-form is-active" data-form="parent" novalidate>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="p-name">Имя родителя <span aria-hidden="true">*</span></label>
+                <input id="p-name" name="name" type="text" placeholder="Как к вам обращаться"
+                       data-validate="required" autocomplete="name" aria-describedby="p-name-err">
+                <span class="form-error" id="p-name-err" role="alert"></span>
+              </div>
+              <div class="form-field">
+                <label for="p-phone">Телефон <span aria-hidden="true">*</span></label>
+                <input id="p-phone" name="phone" type="tel" placeholder="+998 ___ ___-__-__"
+                       data-validate="required phone" autocomplete="tel" aria-describedby="p-phone-err">
+                <span class="form-error" id="p-phone-err" role="alert"></span>
+              </div>
             </div>
-            <div class="form-field">
-              <label for="phone">Телефон*</label>
-              <input id="phone" name="phone" type="tel" placeholder="+998 ___ ___-__-__" required>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="p-child">Имя ребёнка <span aria-hidden="true">*</span></label>
+                <input id="p-child" name="child" type="text" placeholder="Имя"
+                       data-validate="required" aria-describedby="p-child-err">
+                <span class="form-error" id="p-child-err" role="alert"></span>
+              </div>
+              <div class="form-field">
+                <label for="p-grade">Класс / Возраст <span aria-hidden="true">*</span></label>
+                <select id="p-grade" name="grade" data-validate="required" aria-describedby="p-grade-err">
+                  <option value="">Выберите...</option>
+                  <option>Подготовительный</option>
+                  <option>1 класс</option><option>2 класс</option>
+                  <option>3 класс</option><option>4 класс</option>
+                  <option>5+ класс</option>
+                </select>
+                <span class="form-error" id="p-grade-err" role="alert"></span>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="child">Имя ребёнка*</label>
-              <input id="child" name="child" type="text" placeholder="Имя" required>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="p-time">Удобное время для звонка</label>
+                <select id="p-time" name="call_time">
+                  <option value="">Любое</option>
+                  <option>Утро (9:00–12:00)</option>
+                  <option>День (12:00–17:00)</option>
+                  <option>Вечер (17:00–20:00)</option>
+                </select>
+              </div>
             </div>
-            <div class="form-field">
-              <label for="age">Класс / Возраст</label>
-              <select id="age" name="age">
-                <option>Подготовительный</option>
-                <option>1 класс</option>
-                <option>2 класс</option>
-                <option>3 класс</option>
-                <option>4 класс</option>
-                <option>5+ класс</option>
+            <div class="form-field" style="margin-bottom:var(--space-3);">
+              <label for="p-msg">Комментарий</label>
+              <textarea id="p-msg" name="message" rows="3" placeholder="Если есть пожелания — напишите"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" data-ripple-btn style="width:100%;justify-content:center;" disabled>
+              Отправить заявку <span class="btn-arrow">→</span>
+            </button>
+            <p class="form-consent">Нажимая «Отправить», вы соглашаетесь на обработку персональных данных</p>
+          </form>
+
+          <!-- УЧИТЕЛЬ -->
+          <form class="trial-form" data-form="teacher" novalidate>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="t-name">Ваше имя <span aria-hidden="true">*</span></label>
+                <input id="t-name" name="name" type="text" placeholder="Имя и фамилия"
+                       data-validate="required" autocomplete="name" aria-describedby="t-name-err">
+                <span class="form-error" id="t-name-err" role="alert"></span>
+              </div>
+              <div class="form-field">
+                <label for="t-phone">Телефон <span aria-hidden="true">*</span></label>
+                <input id="t-phone" name="phone" type="tel" placeholder="+998 ___ ___-__-__"
+                       data-validate="required phone" autocomplete="tel" aria-describedby="t-phone-err">
+                <span class="form-error" id="t-phone-err" role="alert"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="t-tg">Telegram</label>
+                <input id="t-tg" name="telegram" type="text" placeholder="@username"
+                       data-validate="telegram" aria-describedby="t-tg-err">
+                <span class="form-hint">Для быстрой связи. Если нет Telegram — оставьте номер в поле выше.</span>
+                <span class="form-error" id="t-tg-err" role="alert"></span>
+              </div>
+              <div class="form-field">
+                <label for="t-subject">Предмет / направление <span aria-hidden="true">*</span></label>
+                <select id="t-subject" name="subject" data-validate="required" aria-describedby="t-subject-err">
+                  <option value="">Выберите...</option>
+                  <option>Английский язык</option><option>Математика</option>
+                  <option>Начальные классы</option><option>Русский язык</option>
+                  <option>Узбекский язык</option><option>Естественные науки</option>
+                  <option>Творчество</option><option>Спорт</option>
+                  <option>Психолог</option><option>Другое</option>
+                </select>
+                <span class="form-error" id="t-subject-err" role="alert"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="t-exp">Опыт преподавания <span aria-hidden="true">*</span></label>
+                <select id="t-exp" name="experience" data-validate="required" aria-describedby="t-exp-err">
+                  <option value="">Выберите...</option>
+                  <option>Менее 1 года</option><option>1–3 года</option>
+                  <option>3–5 лет</option><option>5–10 лет</option>
+                  <option>Более 10 лет</option>
+                </select>
+                <span class="form-error" id="t-exp-err" role="alert"></span>
+              </div>
+              <div class="form-field">
+                <label for="t-edu">Образование</label>
+                <input id="t-edu" name="education" type="text" placeholder="ВУЗ и специальность">
+              </div>
+            </div>
+            <div class="form-field" style="margin-bottom:var(--space-3);">
+              <label>Языки преподавания</label>
+              <div class="form-checkboxes">
+                <label class="form-checkbox"><input type="checkbox" name="languages" value="Русский"> Русский</label>
+                <label class="form-checkbox"><input type="checkbox" name="languages" value="Английский"> Английский</label>
+                <label class="form-checkbox"><input type="checkbox" name="languages" value="Узбекский"> Узбекский</label>
+              </div>
+            </div>
+            <div class="form-field" style="margin-bottom:var(--space-3);">
+              <label>Резюме</label>
+              <span class="form-hint">PDF, DOC или DOCX. До 5 МБ. Необязательно — можно прислать позже в Telegram.</span>
+              <div class="file-drop" id="t-cv-drop" data-file-drop>
+                <input type="file" id="t-cv-file" name="cv_file" accept=".pdf,.doc,.docx"
+                       class="file-drop__input" tabindex="-1" aria-hidden="true">
+                <div class="file-drop__prompt">
+                  <span class="file-drop__icon" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  </span>
+                  <span class="file-drop__text">Перетащите файл сюда<br>или <span class="file-drop__link">нажмите для выбора</span></span>
+                </div>
+                <div class="file-drop__preview" hidden>
+                  <span class="file-drop__file-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  </span>
+                  <span class="file-drop__filename"></span>
+                  <span class="file-drop__filesize"></span>
+                  <button type="button" class="file-drop__remove" aria-label="Удалить файл">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                </div>
+              </div>
+              <span class="form-error" id="t-cv-drop-err" role="alert"></span>
+            </div>
+            <div class="form-field" style="margin-bottom:var(--space-3);">
+              <label for="t-about">О себе</label>
+              <textarea id="t-about" name="about" rows="4"
+                        placeholder="Почему хотите работать в Dream School, методики, достижения"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" data-ripple-btn style="width:100%;justify-content:center;" disabled>
+              Отправить заявку <span class="btn-arrow">→</span>
+            </button>
+            <p class="form-consent">Нажимая «Отправить», вы соглашаетесь на обработку персональных данных</p>
+          </form>
+
+          <!-- ПАРТНЁР -->
+          <form class="trial-form" data-form="partner" novalidate>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="pr-name">Ваше имя <span aria-hidden="true">*</span></label>
+                <input id="pr-name" name="name" type="text" placeholder="Имя и фамилия"
+                       data-validate="required" autocomplete="name" aria-describedby="pr-name-err">
+                <span class="form-error" id="pr-name-err" role="alert"></span>
+              </div>
+              <div class="form-field">
+                <label for="pr-company">Компания / Организация</label>
+                <input id="pr-company" name="company" type="text" placeholder="Название (если есть)">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="pr-phone">Телефон <span aria-hidden="true">*</span></label>
+                <input id="pr-phone" name="phone" type="tel" placeholder="+998 ___ ___-__-__"
+                       data-validate="required phone" autocomplete="tel" aria-describedby="pr-phone-err">
+                <span class="form-error" id="pr-phone-err" role="alert"></span>
+              </div>
+              <div class="form-field">
+                <label for="pr-tg">Telegram</label>
+                <input id="pr-tg" name="telegram" type="text" placeholder="@username"
+                       data-validate="telegram" aria-describedby="pr-tg-err">
+                <span class="form-hint">Для быстрой связи. Если нет Telegram — оставьте номер в поле выше.</span>
+                <span class="form-error" id="pr-tg-err" role="alert"></span>
+              </div>
+            </div>
+            <div class="form-field" style="margin-bottom:var(--space-3);">
+              <label for="pr-type">Тип сотрудничества <span aria-hidden="true">*</span></label>
+              <select id="pr-type" name="partner_type" data-validate="required" aria-describedby="pr-type-err">
+                <option value="">Выберите...</option>
+                <option>Образовательный партнёр</option><option>Поставщик</option>
+                <option>Мероприятие / событие</option><option>СМИ / блогер</option>
+                <option>Другое</option>
               </select>
+              <span class="form-error" id="pr-type-err" role="alert"></span>
             </div>
+            <div class="form-field" style="margin-bottom:var(--space-3);">
+              <label for="pr-desc">Описание предложения <span aria-hidden="true">*</span></label>
+              <textarea id="pr-desc" name="description" rows="4"
+                        placeholder="Опишите идею или предложение (минимум 30 символов)"
+                        data-validate="required minlength:30" aria-describedby="pr-desc-err"></textarea>
+              <span class="form-error" id="pr-desc-err" role="alert"></span>
+            </div>
+            <button type="submit" class="btn btn-primary" data-ripple-btn style="width:100%;justify-content:center;" disabled>
+              Отправить заявку <span class="btn-arrow">→</span>
+            </button>
+            <p class="form-consent">Нажимая «Отправить», вы соглашаетесь на обработку персональных данных</p>
+          </form>
+
+        </div><!-- /data-trial-form-wrap -->
+
+        <!-- Экран успеха -->
+        <div data-trial-success hidden>
+          <div class="trial-success">
+            <div class="trial-success__check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h3 data-success-title class="trial-success__title">Заявка получена!</h3>
+            <p data-success-text class="trial-success__text">
+              Мы позвоним в течение рабочего дня и согласуем удобное время визита.
+            </p>
+            <button class="btn btn-ghost" data-trial-reset>Отправить ещё одну заявку</button>
           </div>
-          <div class="form-field" style="margin-bottom: var(--space-3);">
-            <label for="msg">Комментарий</label>
-            <textarea id="msg" name="msg" rows="3" placeholder="Если есть пожелания — напишите"></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary" data-ripple-btn style="width: 100%; justify-content: center;">
-            Отправить заявку <span class="btn-arrow">→</span>
-          </button>
-          <div data-form-status class="form-status"></div>
-          <p style="font-size: 0.8rem; color: var(--ink-mute); text-align: center; margin-top: var(--space-3);">
-            Нажимая «Отправить», вы соглашаетесь на обработку персональных данных
-          </p>
-        </form>
-      </div>
-    </div>
-  </div>
+        </div>
+
+      </div><!-- /trial-card -->
+    </div><!-- /trial-grid -->
+  </div><!-- /container -->
 </section>
 
 <!-- ============ TESTIMONIALS ============ -->
-<section class="section testimonials surface-soft" data-aura="lavender">
+<section class="section testimonials">
   <div class="container">
-    <span class="eyebrow" style="justify-content: center; color: rgba(175, 192, 255, 0.8);">Отзывы родителей</span>
-    <h2 style="margin-top: var(--space-3); margin-bottom: var(--space-6); color: white;">Что говорят те,<br><em class="serif-italic" style="color: var(--sky);">кто уже с нами</em></h2>
+    <span class="eyebrow" style="justify-content: center;">Отзывы родителей</span>
+    <h2 style="margin-top: var(--space-3);">Что говорят те,<br><em class="serif-italic">кто уже с нами</em></h2>
 
-    <div class="testimonial-stage testimonials-swiper swiper">
-      <div class="swiper-wrapper">
-      <div class="testimonial swiper-slide" data-testimonial>
-        <blockquote>«За год дочка раскрылась как человек: появилась уверенность, друзья, английский. Чувствуется, что в школе действительно заботятся, а не просто учат программу.»</blockquote>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">МК</div>
-          <div>
-            <strong>Мадина Каримова</strong>
-            <span>Мама ученицы 2 класса</span>
+    <div class="tcl">
+      <div class="tcl__viewport swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <article class="tcl-card">
+              <blockquote class="tcl-card__quote">«За год дочка раскрылась как человек: появилась уверенность, друзья, английский. Чувствуется, что в школе действительно заботятся, а не просто учат программу.»</blockquote>
+              <div class="tcl-card__author">
+                <div class="tcl-card__avatar">МК</div>
+                <div class="tcl-card__meta">
+                  <strong class="tcl-card__name">Мадина Каримова</strong>
+                  <span class="tcl-card__role">Мама ученицы 2 класса</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="swiper-slide">
+            <article class="tcl-card">
+              <blockquote class="tcl-card__quote">«Сын каждое утро бежит в школу. Это, наверное, самое честное, что я могу сказать о Dream School. Учителя живые, программа интересная, среда тёплая.»</blockquote>
+              <div class="tcl-card__author">
+                <div class="tcl-card__avatar">АТ</div>
+                <div class="tcl-card__meta">
+                  <strong class="tcl-card__name">Азиза Турсунова</strong>
+                  <span class="tcl-card__role">Мама ученика 1 класса</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="swiper-slide">
+            <article class="tcl-card">
+              <blockquote class="tcl-card__quote">«Ценим, что школа делает упор не только на знания, но и на эмоциональный интеллект. Это редкость, и это реально работает — мы видим дома.»</blockquote>
+              <div class="tcl-card__author">
+                <div class="tcl-card__avatar">ДА</div>
+                <div class="tcl-card__meta">
+                  <strong class="tcl-card__name">Дильшод Ахмедов</strong>
+                  <span class="tcl-card__role">Папа ученика 3 класса</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="swiper-slide">
+            <article class="tcl-card">
+              <blockquote class="tcl-card__quote">«Понравился подход к мультикультурности — Навруз, праздники, разные языки. Дети растут, понимая, что мир большой и разный, и это здорово.»</blockquote>
+              <div class="tcl-card__author">
+                <div class="tcl-card__avatar">НС</div>
+                <div class="tcl-card__meta">
+                  <strong class="tcl-card__name">Нодира Саидова</strong>
+                  <span class="tcl-card__role">Мама ученицы 4 класса</span>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </div>
 
-      <div class="testimonial swiper-slide" data-testimonial>
-        <blockquote>«Сын каждое утро бежит в школу. Это, наверное, самое честное, что я могу сказать о Dream School. Учителя живые, программа интересная, среда тёплая.»</blockquote>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">АТ</div>
-          <div>
-            <strong>Азиза Турсунова</strong>
-            <span>Мама ученика 1 класса</span>
-          </div>
-        </div>
-      </div>
+      <button class="tcl__arrow tcl__arrow--prev" type="button" aria-label="Предыдущий отзыв">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button class="tcl__arrow tcl__arrow--next" type="button" aria-label="Следующий отзыв">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
 
-      <div class="testimonial swiper-slide" data-testimonial>
-        <blockquote>«Ценим, что школа делает упор не только на знания, но и на эмоциональный интеллект. Это редкость, и это реально работает — мы видим дома.»</blockquote>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">ДА</div>
-          <div>
-            <strong>Дильшод Ахмедов</strong>
-            <span>Папа ученика 3 класса</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="testimonial swiper-slide" data-testimonial>
-        <blockquote>«Понравился подход к мультикультурности — Навруз, праздники, разные языки. Дети растут, понимая, что мир большой и разный, и это здорово.»</blockquote>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">НС</div>
-          <div>
-            <strong>Нодира Саидова</strong>
-            <span>Мама ученицы 4 класса</span>
-          </div>
-        </div>
-      </div>
-      </div>
+      <div class="tcl__dots"></div>
     </div>
-    <div class="testimonial-dots swiper-pagination"></div>
   </div>
 </section>
 

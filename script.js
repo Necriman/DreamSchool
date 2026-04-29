@@ -131,25 +131,246 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  const setTrialFormSubmit = () => {
-    const form = document.querySelector('[data-trial-form]');
-    if (!form) return;
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(form).entries());
-      const status = form.querySelector('[data-form-status]');
-      if (!data.parent || !data.phone || !data.child) {
-        status.textContent = 'Пожалуйста, заполните все обязательные поля.';
-        status.className = 'form-status is-error';
-        return;
-      }
-      status.innerHTML = '<span class="status-check">✓</span> Заявка отправлена! Мы свяжемся с вами в течение дня.';
-      status.className = 'form-status is-success';
-      if (!isReduced) createConfetti(status);
-      form.reset();
-      setFormMicroUX();
-      setTimeout(() => { status.textContent = ''; status.className = 'form-status'; }, 6000);
+  const setTrialForm = () => {
+    const section = document.querySelector('#trial');
+    if (!section) return;
+
+    const roleTabs = section.querySelectorAll('.role-tab');
+    const forms = section.querySelectorAll('.trial-form');
+    const titleEl = section.querySelector('[data-trial-title]');
+    const subtitleEl = section.querySelector('[data-trial-subtitle]');
+    const noteEl = section.querySelector('[data-trial-note]');
+    const eyebrowEl = section.querySelector('.trial-eyebrow');
+    const formWrap = section.querySelector('[data-trial-form-wrap]');
+    const successEl = section.querySelector('[data-trial-success]');
+    const resetBtn = section.querySelector('[data-trial-reset]');
+
+    const ROLES = {
+      parent: {
+        eyebrow: 'Пробный день',
+        title: 'Запишитесь на <em class="serif-italic" style="color:var(--accent)">пробный день</em>',
+        subtitle: 'Познакомимся, покажем школу, ответим на вопросы',
+        note: 'После заявки наш менеджер свяжется с вами в течение дня и подберёт удобную дату.',
+        successTitle: 'Заявка получена!',
+        successText: 'Мы позвоним в течение рабочего дня и согласуем удобное время визита.',
+      },
+      teacher: {
+        eyebrow: 'Карьера',
+        title: 'Стать частью <em class="serif-italic" style="color:var(--accent)">команды</em>',
+        subtitle: 'Расскажите о себе — мы свяжемся для интервью',
+        note: 'Мы рассмотрим вашу заявку в течение 3–5 рабочих дней.',
+        successTitle: 'Спасибо за интерес!',
+        successText: 'Мы изучим резюме и свяжемся для интервью в течение 3–5 рабочих дней.',
+      },
+      partner: {
+        eyebrow: 'Партнёрство',
+        title: 'Давайте обсудим <em class="serif-italic" style="color:var(--accent)">сотрудничество</em>',
+        subtitle: 'Опишите идею — обсудим формат',
+        note: 'Мы рассмотрим предложение и ответим в ближайшие дни.',
+        successTitle: 'Спасибо за предложение!',
+        successText: 'Мы рассмотрим его и ответим в ближайшие дни.',
+      },
+    };
+
+    let activeRole = 'parent';
+
+    const switchRole = (role) => {
+      if (!ROLES[role]) return;
+      activeRole = role;
+      const cfg = ROLES[role];
+      roleTabs.forEach((tab) => {
+        const on = tab.dataset.role === role;
+        tab.classList.toggle('is-active', on);
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+      });
+      if (eyebrowEl) eyebrowEl.textContent = cfg.eyebrow;
+      if (titleEl) titleEl.innerHTML = cfg.title;
+      if (subtitleEl) subtitleEl.textContent = cfg.subtitle;
+      if (noteEl) noteEl.textContent = cfg.note;
+      forms.forEach((form) => form.classList.toggle('is-active', form.dataset.form === role));
+      history.replaceState(null, '', `#trial-${role}`);
+    };
+
+    roleTabs.forEach((tab) => {
+      tab.addEventListener('click', () => switchRole(tab.dataset.role));
+      tab.addEventListener('keydown', (e) => {
+        const tabs = [...roleTabs];
+        const idx = tabs.indexOf(tab);
+        if (e.key === 'ArrowRight') { e.preventDefault(); const t = tabs[(idx + 1) % tabs.length]; t.focus(); switchRole(t.dataset.role); }
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); const t = tabs[(idx - 1 + tabs.length) % tabs.length]; t.focus(); switchRole(t.dataset.role); }
+        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); switchRole(tab.dataset.role); }
+      });
     });
+
+    const validators = {
+      required:  (v) => v.trim() ? '' : 'Поле обязательно для заполнения',
+      phone:     (v) => !v.trim() || /^\+?[\d\s\-()+]{7,}$/.test(v.trim()) ? '' : 'Введите корректный телефон',
+      email:     (v) => !v.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? '' : 'Введите корректный email',
+      telegram:  (v) => {
+        if (!v.trim()) return '';
+        const raw = v.trim().replace(/^@/, '');
+        return /^[a-zA-Z0-9_]{5,}$/.test(raw) ? '' : 'Username должен содержать только латинские буквы, цифры и _';
+      },
+      minlength: (v, n) => v.trim().length >= Number(n) ? '' : `Минимум ${n} символов`,
+    };
+
+    const validateField = (field) => {
+      const rules = (field.dataset.validate || '').split(/\s+/).filter(Boolean);
+      let error = '';
+      for (const rule of rules) {
+        const [name, param] = rule.split(':');
+        if (validators[name]) { error = validators[name](field.value, param); if (error) break; }
+      }
+      const wrap = field.closest('.form-field');
+      const errEl = field.id ? document.getElementById(`${field.id}-err`) : null;
+      if (wrap) wrap.classList.toggle('has-error', !!error);
+      if (errEl) errEl.textContent = error;
+      return !error;
+    };
+
+    const refreshBtn = (form) => {
+      const btn = form.querySelector('[type="submit"]');
+      if (!btn) return;
+      btn.disabled = ![...form.querySelectorAll('[data-validate*="required"]')].every((f) => f.value.trim());
+    };
+
+    forms.forEach((form) => {
+      form.querySelectorAll('input, select, textarea').forEach((field) => {
+        field.addEventListener('blur', () => { if (field.dataset.validate) validateField(field); });
+        field.addEventListener('input', () => {
+          if (field.closest('.form-field')?.classList.contains('has-error')) validateField(field);
+          refreshBtn(form);
+        });
+        field.addEventListener('change', () => refreshBtn(form));
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let ok = true;
+        form.querySelectorAll('[data-validate]').forEach((f) => { if (!validateField(f)) ok = false; });
+        if (!ok) return;
+
+        const data = { role: activeRole };
+        form.querySelectorAll('input, select, textarea').forEach((f) => {
+          if (f.type === 'file') {
+            if (f.files[0]) data[f.name] = f.files[0].name;
+          } else if (f.type === 'checkbox') {
+            if (!data[f.name]) data[f.name] = [];
+            if (f.checked) data[f.name].push(f.value);
+          } else {
+            data[f.name] = f.value;
+          }
+        });
+        if (data.telegram && data.telegram.trim() && !data.telegram.trim().startsWith('@')) {
+          data.telegram = '@' + data.telegram.trim();
+        }
+
+        // TODO: подключить реальную интеграцию для отправки данных.
+        // Вариант 1 — Telegram-бот (текст + файл):
+        //   const formData = new FormData(form);
+        //   formData.append('role', activeRole);
+        //   // Отправить текст: fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, ...)
+        //   // Отправить файл: fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, ...)
+        // Вариант 2 — Formspree (поддерживает файлы):
+        //   fetch('https://formspree.io/f/YOUR_FORM_ID', { method: 'POST', body: new FormData(form) })
+        // Вариант 3 — Supabase Storage / S3 / Cloudinary для файла + Telegram для текста
+        console.log('[DreamSchool] Form submission:', data);
+
+        const cfg = ROLES[activeRole];
+        const stEl = successEl.querySelector('[data-success-title]');
+        const sxEl = successEl.querySelector('[data-success-text]');
+        if (stEl) stEl.textContent = cfg.successTitle;
+        if (sxEl) sxEl.textContent = cfg.successText;
+
+        formWrap.hidden = true;
+        successEl.hidden = false;
+        const checkEl = successEl.querySelector('.trial-success__check');
+        if (!isReduced && checkEl) createConfetti(checkEl);
+
+        form.reset();
+        form.querySelectorAll('.form-field').forEach((fw) => fw.classList.remove('has-error', 'has-value', 'is-focused'));
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        successEl.hidden = true;
+        formWrap.hidden = false;
+      });
+    }
+
+    const initFileDrop = (dropEl) => {
+      const input    = dropEl.querySelector('.file-drop__input');
+      const prompt   = dropEl.querySelector('.file-drop__prompt');
+      const preview  = dropEl.querySelector('.file-drop__preview');
+      const fnameEl  = dropEl.querySelector('.file-drop__filename');
+      const fsizeEl  = dropEl.querySelector('.file-drop__filesize');
+      const removeBtn = dropEl.querySelector('.file-drop__remove');
+      const errElId  = `${dropEl.id}-err`;
+      const errEl    = document.getElementById(errElId);
+
+      const ALLOWED_EXT  = ['.pdf', '.doc', '.docx'];
+      const MAX_BYTES    = 5 * 1024 * 1024;
+
+      const fmtSize = (b) => b < 1024 * 1024 ? `${(b / 1024).toFixed(0)} КБ` : `${(b / 1024 / 1024).toFixed(1)} МБ`;
+
+      const setErr = (msg) => { if (errEl) errEl.textContent = msg; dropEl.classList.toggle('has-error-state', !!msg); };
+
+      const showFile = (file) => {
+        if (fnameEl) fnameEl.textContent = file.name;
+        if (fsizeEl) fsizeEl.textContent = fmtSize(file.size);
+        prompt.hidden = true;
+        preview.hidden = false;
+        dropEl.classList.add('has-file');
+        setErr('');
+      };
+
+      const clearFile = () => {
+        input.value = '';
+        prompt.hidden = false;
+        preview.hidden = true;
+        dropEl.classList.remove('has-file');
+        setErr('');
+      };
+
+      const validateAndShow = (file) => {
+        const ext = '.' + file.name.split('.').pop().toLowerCase();
+        if (!ALLOWED_EXT.includes(ext)) { setErr('Поддерживаются только PDF, DOC и DOCX.'); return; }
+        if (file.size > MAX_BYTES) { setErr('Файл слишком большой. Максимум 5 МБ.'); return; }
+        showFile(file);
+      };
+
+      dropEl.addEventListener('click', (e) => {
+        if (removeBtn && (e.target === removeBtn || removeBtn.contains(e.target))) return;
+        if (!dropEl.classList.contains('has-file')) input.click();
+      });
+      input.addEventListener('change', () => { if (input.files[0]) validateAndShow(input.files[0]); });
+
+      dropEl.addEventListener('dragover',  (e) => { e.preventDefault(); dropEl.classList.add('is-over'); });
+      dropEl.addEventListener('dragleave', ()  => dropEl.classList.remove('is-over'));
+      dropEl.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropEl.classList.remove('is-over');
+        const file = e.dataTransfer.files[0];
+        if (!file) return;
+        try {
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
+        } catch (_) { /* Safari fallback: file won't be in FormData but preview still shows */ }
+        validateAndShow(file);
+      });
+
+      if (removeBtn) removeBtn.addEventListener('click', (e) => { e.stopPropagation(); clearFile(); });
+    };
+
+    section.querySelectorAll('[data-file-drop]').forEach(initFileDrop);
+
+    const hash = window.location.hash;
+    if (hash === '#trial-teacher') switchRole('teacher');
+    else if (hash === '#trial-partner') switchRole('partner');
+    else switchRole('parent');
   };
 
   const createConfetti = (anchor) => {
@@ -176,26 +397,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setHomeSwipers = () => {
     if (!isHome || typeof window.Swiper === 'undefined') return;
-    const testWrap = document.querySelector('.testimonials-swiper');
-    if (!testWrap) return;
-    // eslint-disable-next-line no-new
-    new Swiper(testWrap, {
+    const viewport = document.querySelector('.tcl__viewport');
+    if (!viewport) return;
+    const prevBtn = document.querySelector('.tcl__arrow--prev');
+    const nextBtn = document.querySelector('.tcl__arrow--next');
+    new Swiper(viewport, {
       loop: true,
-      speed: 800,
-      autoplay: isReduced ? false : { delay: 5200, disableOnInteraction: false },
+      speed: 600,
       centeredSlides: true,
-      slidesPerView: 1.15,
-      spaceBetween: 14,
-      breakpoints: {
-        920: { slidesPerView: 1.45, spaceBetween: 20 },
+      slidesPerView: 1,
+      spaceBetween: 24,
+      grabCursor: true,
+      autoplay: isReduced ? false : {
+        delay: 6000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
       },
-      pagination: { el: '.testimonial-dots', clickable: true },
-      on: {
-        init() { document.querySelector('.testimonials')?.classList.add('is-quote-visible'); },
+      breakpoints: {
+        768: { slidesPerView: 1.1, spaceBetween: 28 },
+        1024: { slidesPerView: 1.4, spaceBetween: 36 },
+      },
+      navigation: {
+        prevEl: prevBtn,
+        nextEl: nextBtn,
+      },
+      pagination: {
+        el: '.tcl__dots',
+        clickable: true,
       },
     });
-    testWrap.addEventListener('mouseenter', () => testWrap.swiper?.autoplay?.stop());
-    testWrap.addEventListener('mouseleave', () => { if (!isReduced) testWrap.swiper?.autoplay?.start(); });
   };
 
   if (!hasGSAP || !hasScrollTrigger || isReduced) {
@@ -203,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setRevealFallback();
     setFormMicroUX();
     setButtonRipple();
-    setTrialFormSubmit();
+    setTrialForm();
     setHomeSwipers();
     return;
   }
@@ -243,6 +473,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dot = document.createElement('div');
     glow.className = 'cursor-aura-glow';
     dot.className = 'cursor-aura-dot';
+    glow.style.opacity = '0';
+    dot.style.opacity = '0';
     document.body.append(glow, dot);
     document.body.classList.add('has-aura');
 
@@ -251,12 +483,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let glowX = mouseX;
     let glowY = mouseY;
     let pressTimer;
+    let cursorVisible = false;
 
     window.addEventListener('pointermove', (event) => {
       mouseX = event.clientX;
       mouseY = event.clientY;
       dot.style.left = `${mouseX}px`;
       dot.style.top = `${mouseY}px`;
+      if (!cursorVisible) {
+        cursorVisible = true;
+        glowX = mouseX;
+        glowY = mouseY;
+        glow.style.left = `${glowX}px`;
+        glow.style.top = `${glowY}px`;
+        glow.style.opacity = '1';
+        dot.style.opacity = '1';
+      }
     });
 
     window.addEventListener('mousedown', () => {
@@ -298,6 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const animateRevealOnce = () => {
     gsap.utils.toArray('.reveal').forEach((item) => {
+      if (item.classList.contains('value-card')) return;
       gsap.fromTo(item, { y: 30, opacity: 0 }, {
         y: 0,
         opacity: 1,
@@ -310,13 +553,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setHeroAnimations = () => {
     if (!isHome) return;
-    gsap.to('.hero-title-word > span', {
-      yPercent: 0,
-      duration: 0.9,
-      stagger: 0.08,
-      ease: 'power3.out',
-      delay: 0.15,
-    });
+    gsap.fromTo('.hero-title-word > span',
+      { yPercent: 110 },
+      {
+        yPercent: 0,
+        duration: 0.9,
+        stagger: 0.08,
+        ease: 'power3.out',
+        delay: 0.15,
+      }
+    );
 
     const linePath = document.querySelector('.hero-underline path');
     if (linePath) {
@@ -426,14 +672,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const setValuesAnimations = () => {
     const cards = gsap.utils.toArray('.values .value-card');
     if (cards.length) {
-      gsap.set(cards, { opacity: 0, y: 24 });
-      gsap.from(cards, {
-        y: 24,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.12,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '.values-grid', start: 'top 80%', toggleActions: 'play none none none', once: true },
+      gsap.set(cards, { opacity: 0, y: 30 });
+      ScrollTrigger.batch(cards, {
+        start: 'top 85%',
+        onEnter: (batch) => gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.12,
+          ease: 'power2.out',
+          overwrite: true,
+        }),
+        once: true,
       });
     }
 
@@ -573,7 +823,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setHomeSwipers();
   setFormMicroUX();
   setButtonRipple();
-  setTrialFormSubmit();
+  setTrialForm();
 
   const copyAddressBtn = document.getElementById('copyAddressBtn');
   if (copyAddressBtn) {

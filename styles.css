@@ -160,11 +160,18 @@ h4 { font-size: 1.25rem; font-weight: 500; }
   align-items: center;
   gap: 10px;
   font-family: var(--serif);
+  font-style: italic;
   font-size: 1.4rem;
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--ink);
 }
+.logo span {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+}
+.logo span + span { margin-left: 6px; }
 .logo-mark {
   width: 38px;
   height: 38px;
@@ -174,7 +181,7 @@ h4 { font-size: 1.25rem; font-weight: 500; }
   box-shadow: 0 4px 12px rgba(46, 111, 184, 0.18);
   background: transparent;
 }
-.logo span:last-child { font-style: italic; color: var(--accent); }
+.logo span:last-child { color: var(--accent); }
 
 .nav-links {
   display: flex;
